@@ -70,6 +70,7 @@ export async function generateEnv() {
     "utf8"
   );
   log.succeed("env server generated");
+  
 
   await fs.writeFile(
     path.join(root, "src/lib/EnvProvider.tsx"),
