@@ -1,0 +1,140 @@
+// Import type NextRequest buat nanganin request, dan NextResponse buat balikin response.
+// Juga import jwtVerify dan SignJWT dari "jose" buat verifikasi dan bikin JWT.
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { jwtVerify, SignJWT } from "jose";
+
+const middlewareConfig = {
+  publicRoute: [
+    // Daftar route yang bisa diakses tanpa login
+    "/",
+    "/auth/login",
+    "/auth/register",
+    "/api/signin",
+    "/api/register"
+  ],
+  publicPatterns: [/^\/api\/files\/\w+/], // Regex buat nge-match route API yang bisa diakses bebas
+  signinPath: "/auth/login", // Brute buat halaman login
+  userPath: "/user", // Route buat halaman user setelah login
+  apiRoute: "/api",
+  tokenKey: "ws_token",
+  exp: "7 year"
+};
+
+// Kunci rahasia buat konfigurasi
+const secretKey = process.env.SESSION_SECRET || ""; // Kalo SESSION_SECRET nggak ada, pake string kosong biar gak error
+const encodedKey = new TextEncoder().encode(secretKey); // Kunci ini bakal diencode buat dipake di JWT
+
+// Fungsi buat decode token JWT
+async function decrypt(token: string): Promise<Record<string, unknown> | null> {
+  try {
+    const { payload } = await jwtVerify(token, encodedKey, {
+      algorithms: ["HS256"]
+    });
+    return (payload.user as Record<string, unknown>) || null;
+  } catch (error) {
+    console.error("Gagal verifikasi session", error);
+    return null;
+  }
+}
+
+// Fungsi buat bikin (encode) token JWT
+export async function encrypt(
+  user: Record<string, unknown>, 
+  exp: string
+): Promise<string> {
+  return new SignJWT({ user })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime(exp)
+    .sign(encodedKey);
+}
+
+// Fungsi buat verifikasi token dan balikin data user
+async function verifyToken(
+  token: string | undefined
+): Promise<Record<string, unknown> | null> {
+  if (!token) return null;
+  return await decrypt(token);
+}
+
+// Fungsi buat set header CORS
+function setCorsHeaders(res: NextResponse): void {
+  res.headers.set("Access-Control-Allow-Origin", "*");
+  res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+}
+
+// Fungsi buat nanganin setup CORS dan preflight request (OPTIONS)
+function handleCors(req: NextRequest, res: NextResponse): NextResponse {
+  setCorsHeaders(res);
+  if (req.method === "OPTIONS") {
+    return new NextResponse(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": "86400"
+      }
+    });
+  }
+  return res;
+}
+
+// Fungsi utama middleware
+export async function wibuMiddleware(req: NextRequest, middlewareConfig: {
+  publicRoute: string[],
+  publicPatterns: RegExp[],
+  signinPath: string,
+  userPath: string,
+  apiRoute: string,
+  tokenKey: string,
+  exp: string
+}) {
+  const { pathname } = req.nextUrl;
+
+  if (
+    middlewareConfig.publicRoute.includes(pathname) || 
+    middlewareConfig.publicPatterns.some((pattern) => pattern.test(pathname))
+  ) {
+    return handleCors(req, NextResponse.next());
+  }
+
+  const token =
+    req.cookies.get(middlewareConfig.tokenKey)?.value || 
+    req.headers.get("Authorization")?.split(" ")[1];
+  const user = await verifyToken(token);
+
+  if (!user) {
+    if (pathname.startsWith(middlewareConfig.apiRoute)) {
+      return handleCors(req, unauthorizedResponse());
+    }
+    return handleCors(
+      req,
+      NextResponse.redirect(new URL(middlewareConfig.signinPath, req.url))
+    );
+  }
+
+  if (pathname === middlewareConfig.signinPath) {
+    return handleCors(
+      req,
+      NextResponse.redirect(new URL(middlewareConfig.userPath, req.url))
+    );
+  }
+
+  return handleCors(req, NextResponse.next());
+}
+
+// Fungsi buat balikin response unauthorized
+function unauthorizedResponse(): NextResponse {
+  return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {
+    status: 401,
+    headers: { "Content-Type": "application/json" }
+  });
+}
+
+// Konfigurasi buat middleware Next.js
+export const config = {
+  matcher: ["/((?!_next|static|favicon.ico).*)"]
+};

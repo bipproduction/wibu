@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+import yargs from "yargs";
+
+import { realtime } from "./lib/generate";
+import { generateEnv } from "./lib/generate_env";
+import { genExample } from "./lib/generate_example";
+import { generatePrisma } from "./lib/generate_prisma";
+import { push } from "./lib/git";
+import { json } from "./lib/json";
+import { mid } from "./lib/mid";
+import * as pwa from "./lib/pwa";
+import { route } from "./lib/route";
+import { generateType } from "./lib/generate_type";
+
+yargs()
+  .command(
+    "json",
+    "generate json",
+    (yargs) =>
+      yargs.positional("path", {
+        type: "string",
+        description: "path to file",
+        demandOption: true
+      }),
+    (argv) => json(argv.path)
+  )
+  .command("pwa-install", "generate pwa nextjs", (yargs) => yargs, pwa.install)
+  .command(
+    "pwa-uninstall",
+    "generate pwa nextjs",
+    (yargs) => yargs,
+    pwa.uninstall
+  )
+  .command("route", "generate route", (yargs) => yargs, route)
+  .command("mid", "generate middleware", (yargs) => yargs, mid)
+  .command(
+    "git-push",
+    "git push",
+    (yargs) =>
+      yargs.positional("branch", {
+        type: "string",
+        description: "branch name"
+      }),
+    (argv) => push(argv) as any
+  )
+  .command("gen-env", "generate env", (yargs) => yargs, generateEnv as any)
+  .command("gen-realtime", "generate realtime", (yargs) => yargs, realtime)
+  .command(
+    "gen-JSDoc",
+    "generate JSDoc",
+    (yargs) =>
+      yargs.positional("path", {
+        type: "string",
+        description: "path to file",
+        demandOption: true
+      }),
+    (argv) => genExample(argv.path!)
+  )
+  .command("gen-prisma", "generate prisma", (yargs) => yargs, generatePrisma)
+  .command(
+    "gen-type",
+    "generate type",
+    (yargs) =>
+      yargs.positional("path", {
+        type: "string",
+        description: "path to file or url",
+        demandOption: true
+      }),
+    (argv) => {
+      generateType(argv.path);
+    }
+  )
+  .demandCommand(1, "Please specify a command to run")
+  .help()
+  .version()
+  .recommendCommands()
+  .parse(process.argv.splice(2));
