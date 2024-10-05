@@ -61,7 +61,7 @@ async function push(branch) {
         return log.fail("failed to generate commit message");
     }
     // Create a temporary file for the commit message
-    const tmpFilePath = path_1.default.join(os_1.default.tmpdir(), `commit_message_${Date.now()}.txt`);
+    const tmpFilePath = path_1.default.join(os_1.default.tmpdir(), `commit_message.txt`);
     await promises_1.default.writeFile(tmpFilePath, text);
     try {
         await execPromise(`git add -A && git commit --file="${tmpFilePath}" && git push origin ${branchName}`);

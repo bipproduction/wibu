@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useWibuRealtime = exports.wibuMiddleware = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.ollamaAi = exports.waPinHandler = exports.sessionDelete = void 0;
+exports.useWibuRealtime = exports.wibuMiddleware = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = void 0;
+var wibu_ai_chat_1 = require("./lib/ai/wibu_ai_chat");
+Object.defineProperty(exports, "wibuAiChat", { enumerable: true, get: function () { return wibu_ai_chat_1.wibuAiChat; } });
+var wibu_ai_generate_1 = require("./lib/ai/wibu_ai_generate");
+Object.defineProperty(exports, "wibuAiGenerate", { enumerable: true, get: function () { return wibu_ai_generate_1.wibuAiGenerate; } });
 var session_delete_1 = require("./lib/middleware/session_delete");
 Object.defineProperty(exports, "sessionDelete", { enumerable: true, get: function () { return session_delete_1.sessionDelete; } });
 var wa_pin_handler_1 = require("./lib/wa/wa_pin_handler");
 Object.defineProperty(exports, "waPinHandler", { enumerable: true, get: function () { return wa_pin_handler_1.waPinHandler; } });
-var ollama_ai_1 = require("./lib/ai/ollama_ai");
-Object.defineProperty(exports, "ollamaAi", { enumerable: true, get: function () { return ollama_ai_1.ollamaAi; } });
+// export { ollamaAi } from "./lib/ai/ollama_ai";
 var session_create_1 = require("./lib/middleware/session_create");
 Object.defineProperty(exports, "sessionCreate", { enumerable: true, get: function () { return session_create_1.sessionCreate; } });
 var decrypt_1 = require("./lib/middleware/decrypt");
