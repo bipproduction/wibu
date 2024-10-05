@@ -37,18 +37,15 @@ const envClientClass = (0, dedent_1.default) `
       return null;
     }
   `;
-const envProviderText = (0, dedent_1.default) `
-    import { EnvClientProvider } from "./client/EnvClient";
-    import { EnvServer } from "./server/EnvServer";
-
-    export function EnvProvider({ env }: { env?:string }) {
-      const jsonEnv = env ? JSON.parse(env) : {};
-      EnvServer.init(jsonEnv);
-
-      return <EnvClientProvider env={env} />;
-    }
-
-  `;
+// const envProviderText = dedent`
+//     import { EnvClientProvider } from "./client/EnvClient";
+//     import { EnvServer } from "./server/EnvServer";
+//     export function EnvProvider({ env }: { env?:string }) {
+//       const jsonEnv = env ? JSON.parse(env) : {};
+//       EnvServer.init(jsonEnv);
+//       return <EnvClientProvider env={env} />;
+//     }
+//   `;
 async function generateEnv() {
     await promises_1.default.mkdir(path_1.default.join(root, "src/lib/client"), { recursive: true });
     await promises_1.default.mkdir(path_1.default.join(root, "src/lib/server"), { recursive: true });
@@ -64,8 +61,12 @@ async function generateEnv() {
     log.succeed("type env generated");
     await promises_1.default.writeFile(path_1.default.join(root, "src/lib/server/EnvServer.ts"), envServerText, "utf8");
     log.succeed("env server generated");
-    await promises_1.default.writeFile(path_1.default.join(root, "src/lib/EnvProvider.tsx"), envProviderText, "utf8");
-    log.succeed("env provider generated");
+    // await fs.writeFile(
+    //   path.join(root, "src/lib/EnvProvider.tsx"),
+    //   envProviderText,
+    //   "utf8"
+    // );
+    // log.succeed("env provider generated");
     await promises_1.default.writeFile(path_1.default.join(root, "src/lib/client/EnvClient.ts"), envClientClass, "utf8");
     log.succeed("env client generated");
     log.succeed("env client generated");

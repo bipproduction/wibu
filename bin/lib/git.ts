@@ -65,7 +65,7 @@ export async function push(branch?: string) {
   // Create a temporary file for the commit message
   const tmpFilePath = path.join(
     os.tmpdir(),
-    `commit_message_${Date.now()}.txt`
+    `commit_message.txt`
   );
   await fs.writeFile(tmpFilePath, text);
 
