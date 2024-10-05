@@ -75,11 +75,11 @@ type WibuMiddlewareConfig = {
  *
  * // Konfigurasi middleware yang akan digunakan
  * const config = {
- *   publicRoute: ['/auth/login', '/auth/register'], // Rute yang dapat diakses tanpa otentikasi
- *   publicRoutePatterns: [/^\/api\/files\/\w+/], // Pola regex untuk mengenali rute umum
- *   signinPath: '/auth/login', // Rute untuk halaman login
- *   userPath: '/user', // Rute untuk halaman pengguna setelah login
- *   apiPath: '/api', // Rute dasar untuk API
+ *   publicRoute: ['/auth/login', '/auth/register'], // Route yang dapat diakses tanpa otentikasi
+ *   publicRoutePatterns: [/^\/api\/files\/\w+/], // Pola regex untuk mengenali route umum
+ *   signinPath: '/auth/login', // Route untuk halaman login
+ *   userPath: '/user', // Route untuk halaman pengguna setelah login
+ *   apiPath: '/api', // Route dasar untuk API
  *   tokenName: 'ws_token', // Nama token yang akan dicari dari cookie
  *   exp: '1h' // Waktu kedaluwarsa token
  * };
