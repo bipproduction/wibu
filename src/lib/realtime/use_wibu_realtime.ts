@@ -11,9 +11,8 @@ interface UseClientRealtimeProps {
   url?: string;
 }
 
-
 /**
- *  # GUIDE 
+ *  # GUIDE
  *  [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/use-wibu-realtime.md)
  */
 export function useWibuRealtime({
@@ -30,24 +29,24 @@ export function useWibuRealtime({
 
     const initializeRealtime = async () => {
       try {
-        const supabase = createClient(url, WIBU_REALTIME_TOKEN);
-        supabaseRef.current = supabase;
-
-        const channel = supabase
-          .channel(project)
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: project },
-            (payload: any) => {
-              const data = payload.new?.data ?? null;
-              if (isMounted) {
-                setCurrentData(data);
+        if (!supabaseRef.current) {
+          supabaseRef.current = createClient(url, WIBU_REALTIME_TOKEN);
+        }
+        if (!channelRef.current) {
+          channelRef.current = supabaseRef.current
+            .channel(project)
+            .on(
+              "postgres_changes",
+              { event: "*", schema: "public", table: project },
+              (payload: any) => {
+                const data = payload.new?.data ?? null;
+                if (isMounted) {
+                  setCurrentData(data);
+                }
               }
-            }
-          )
-          .subscribe();
-
-        channelRef.current = channel;
+            )
+            .subscribe();
+        }
       } catch (error) {
         console.error("Error initializing realtime:", error);
       }
@@ -59,22 +58,23 @@ export function useWibuRealtime({
       isMounted = false;
       if (channelRef.current && supabaseRef.current) {
         supabaseRef.current.removeChannel(channelRef.current);
+        channelRef.current.unsubscribe(); // Pastikan untuk unsubscribe dulu
         channelRef.current = null;
       }
       supabaseRef.current = null;
     };
-  }, [WIBU_REALTIME_TOKEN, project]);
+  }, [WIBU_REALTIME_TOKEN, project, url]); // Tambahkan `url` ke dependency array
 
   async function upsertData(val: Record<string, any>) {
     const supabase = supabaseRef.current;
     if (!supabase) {
-      console.error("database client not initialized");
+      console.error("Database client not initialized");
       return null;
     }
 
     try {
       const { status, error } = await supabase.from(project).upsert({
-        id: "123e4567-e89b-12d3-a456-426614174000",
+        id: "123e4567-e89b-12d3-a456-426614174000", // ID bisa disesuaikan dengan skema data
         data: val
       });
 
@@ -82,10 +82,7 @@ export function useWibuRealtime({
         console.error("Error upserting data:", error);
         return null;
       } else {
-        return {
-          status,
-          val
-        };
+        return { status, data: val };
       }
     } catch (error) {
       console.error("Error performing upsert:", error);

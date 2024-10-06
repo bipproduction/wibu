@@ -2,6 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WibuRealtime = void 0;
 const supabase_js_1 = require("@supabase/supabase-js");
+/**
+ * # GUIDE
+ * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/-wibu-realtime.md)
+ *
+ */
 class WibuRealtime {
     static supabase = null;
     static channel = null;
@@ -52,9 +57,6 @@ class WibuRealtime {
             this.supabase.removeChannel(this.channel);
             this.channel = null;
             console.log("Realtime channel cleaned up.");
-        }
-        else {
-            console.warn("No channel to clean up.");
         }
     }
 }

@@ -1,94 +1,120 @@
-# Supabase Realtime Hook Documentation
 
-This package provides a custom React hook `useWibuRealtime` to initialize a real-time connection with Supabase and manage the data it retrieves.
 
 ## Installation
 
-To use this hook, you need to have the following dependencies installed:
+Install the WibuRealtime package using Yarn:
 
 ```bash
-npm install @supabase/supabase-js jose
-# or
-yarn add @supabase/supabase-js jose
+yarn add bipproduction/wibu
 ```
 
-## Usage
+## How to Use WibuRealtime
 
-### Hook: `useWibuRealtime`
+WibuRealtime allows you to easily subscribe to real-time data changes and perform upserts to the database. Follow the steps below to use it in your project.
 
-This hook initializes a real-time connection to Supabase using the provided project configuration. It subscribes to changes in a specified table and provides an interface to upsert (insert or update) data into the database.
+### Step 1: Initialize Realtime Client
 
-### Parameters
+First, initialize the WibuRealtime client by providing the required token, project name, and optional API URL.
 
-- `WIBU_REALTIME_TOKEN`: The JWT token used for authenticating with the Supabase API.
-- `project`: The project name, which should be either `"sdm"` or `"hipmi"`. This will define the table and channel used for real-time updates.
-
-### Return Value
-
-The hook returns a tuple containing:
-1. `currentData`: The latest data retrieved from the Supabase table (can be `null` if no data is available).
-2. `upsertData`: A function to insert or update data into the Supabase table.
-
-### Example Usage
-
-```tsx
+```ts
 import { useWibuRealtime } from 'wibu';
 
-const MyComponent = () => {
-  // Initialize the hook with the token and project name
-  const WIBU_REALTIME_TOKEN = 'your_jwt_token_here';
-  const project = 'sdm';
-  const [currentData, upsertData] = useWibuRealtime({ WIBU_REALTIME_TOKEN, project });
+const WIBU_REALTIME_TOKEN = process.env.NEXT_PUBLIC_WIBU_REALTIME_TOKEN;
+const project = 'sdm'; // or 'hipmi' or 'test'
+
+// Initialize the real-time client
+const [currentData, upsertData] = useWibuRealtime({
+  WIBU_REALTIME_TOKEN,
+  project,
+});
+```
+
+### Step 2: Subscribe to Real-Time Data Changes
+
+You can now subscribe to real-time data changes in your database. The `currentData` state will be updated automatically whenever there is a change.
+
+```ts
+useEffect(() => {
+  if (currentData) {
+    console.log("Real-time data received:", currentData);
+  }
+}, [currentData]);
+```
+
+### Step 3: Perform Data Upsert
+
+To insert or update data in your project, you can use the `upsertData` function. Pass the data object that you want to upsert.
+
+```ts
+const newData = {
+  name: "John Doe",
+  age: 30,
+};
+
+const handleSubmit = async () => {
+  const response = await upsertData(newData);
+
+  if (response) {
+    console.log("Data upserted successfully:", response);
+  } else {
+    console.error("Failed to upsert data.");
+  }
+};
+```
+
+### Step 4: Clean Up
+
+To ensure there are no memory leaks, you should clean up the real-time subscription when it's no longer needed, especially in component unmounts.
+
+```ts
+useEffect(() => {
+  return () => {
+    // Cleanup real-time connection
+    if (supabaseRef.current && channelRef.current) {
+      supabaseRef.current.removeChannel(channelRef.current);
+      channelRef.current = null;
+    }
+  };
+}, []);
+```
+
+### Full Example
+
+```ts
+import React, { useEffect } from "react";
+import { useWibuRealtime } from 'wibu';
+
+const WIBU_REALTIME_TOKEN = '<your-token>';
+const project = 'sdm'; // or 'hipmi' or 'test'
+
+export default function RealtimeComponent() {
+  const [currentData, upsertData] = useWibuRealtime({
+    WIBU_REALTIME_TOKEN,
+    project
+  });
+
+  useEffect(() => {
+    if (currentData) {
+      console.log("Real-time data received:", currentData);
+    }
+  }, [currentData]);
 
   const handleSubmit = async () => {
-    // Example data to upsert
-    const dataToUpsert = {
-      name: "John Doe",
-      age: 30,
-      role: "Developer"
-    };
-
-    // Call the upsertData function to save data
-    const result = await upsertData(dataToUpsert);
-    console.log(result);
+    const newData = { name: "John Doe", age: 30 };
+    const response = await upsertData(newData);
+    if (response) {
+      console.log("Data upserted successfully:", response);
+    } else {
+      console.error("Failed to upsert data.");
+    }
   };
 
   return (
     <div>
-      <h1>Latest Data:</h1>
-      <pre>{JSON.stringify(currentData, null, 2)}</pre>
-      <button onClick={handleSubmit}>Submit Data</button>
+      <button onClick={handleSubmit}>Upsert Data</button>
     </div>
   );
-};
+}
 ```
 
-### Function Details
-
-#### `useWibuRealtime({ WIBU_REALTIME_TOKEN, project })`
-
-- Initializes the real-time connection to the specified Supabase table (`project`).
-- Subscribes to changes in the table and updates `currentData` whenever new data is available.
-- Manages the connection lifecycle, ensuring proper cleanup when the component is unmounted.
-
-#### `upsertData(val: Record<string, any>)`
-
-- Upserts (inserts or updates) data into the Supabase table defined by the `project` parameter.
-- Returns a response object containing the status and the value that was upserted.
-
-### Error Handling
-
-If an error occurs during initialization or data operations, it will be logged to the console. Be sure to handle these errors in your application accordingly.
-
-### Dependencies
-
-- **@supabase/supabase-js**: For creating the Supabase client and managing real-time connections.
-- **jose**: For verifying JWT tokens.
-
-## License
-
-MIT License
-
-### Notes:
-- Be sure to replace `'your_jwt_token_here'` with the actual JWT token in your application.
-- This example assumes the use of TypeScript. If you're using plain JavaScript, you may need to adjust the types accordingly.
+This guide covers the basic usage of WibuRealtime in your project.

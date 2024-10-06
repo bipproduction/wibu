@@ -9,6 +9,11 @@ type RealtimeProps = {
 
 type RealtimeClient = SupabaseClient<any, "public", any>;
 
+/**
+ * # GUIDE
+ * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/-wibu-realtime.md)
+ * 
+ */
 export class WibuRealtime {
   static supabase: RealtimeClient | null = null;
   static channel: RealtimeChannel | null = null;
@@ -77,8 +82,6 @@ export class WibuRealtime {
       this.supabase.removeChannel(this.channel);
       this.channel = null;
       console.log("Realtime channel cleaned up.");
-    } else {
-      console.warn("No channel to clean up.");
     }
   }
 }

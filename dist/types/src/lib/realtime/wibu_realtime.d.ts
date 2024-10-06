@@ -6,6 +6,11 @@ type RealtimeProps = {
     onData: (data: any) => void;
 };
 type RealtimeClient = SupabaseClient<any, "public", any>;
+/**
+ * # GUIDE
+ * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/-wibu-realtime.md)
+ *
+ */
 export declare class WibuRealtime {
     static supabase: RealtimeClient | null;
     static channel: RealtimeChannel | null;

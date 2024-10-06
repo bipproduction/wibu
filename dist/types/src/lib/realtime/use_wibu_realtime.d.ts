@@ -9,6 +9,6 @@ interface UseClientRealtimeProps {
  */
 export declare function useWibuRealtime({ WIBU_REALTIME_TOKEN, project, url }: UseClientRealtimeProps): readonly [any, (val: Record<string, any>) => Promise<{
     status: number;
-    val: Record<string, any>;
+    data: Record<string, any>;
 } | null>];
 export {};
