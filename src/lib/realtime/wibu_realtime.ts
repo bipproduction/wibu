@@ -8,7 +8,7 @@ type RealtimeProps = {
   WIBU_REALTIME_TOKEN: string;
   project: "sdm" | "hipmi" | "test";
   url?: string;
-}
+};
 
 type RealtimeClient = SupabaseClient<any, "public", any>;
 
@@ -24,7 +24,9 @@ export class WibuRealtime {
     url = "https://zyjixsbusgbbtvjogjho.supabase.co/"
   }: RealtimeProps) {
     this.project = project;
-    this.supabase = createClient(url, WIBU_REALTIME_TOKEN);
+    if (!this.supabase) {
+      this.supabase = createClient(url, WIBU_REALTIME_TOKEN);
+    }
   }
 
   // Metode untuk inisialisasi Supabase Realtime
@@ -51,7 +53,10 @@ export class WibuRealtime {
   }
 
   // Metode untuk mengirim atau memperbarui data
-  static async setData(data: any, id: string = "123e4567-e89b-12d3-a456-426614174000") {
+  static async setData(
+    data: any,
+    id: string = "123e4567-e89b-12d3-a456-426614174000"
+  ) {
     if (!this.supabase || !this.project) {
       throw new Error("Realtime client or project not initialized.");
     }

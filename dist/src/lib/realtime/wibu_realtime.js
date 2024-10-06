@@ -9,7 +9,9 @@ class WibuRealtime {
     // Inisialisasi Supabase dan project
     static init({ WIBU_REALTIME_TOKEN, project, url = "https://zyjixsbusgbbtvjogjho.supabase.co/" }) {
         this.project = project;
-        this.supabase = (0, supabase_js_1.createClient)(url, WIBU_REALTIME_TOKEN);
+        if (!this.supabase) {
+            this.supabase = (0, supabase_js_1.createClient)(url, WIBU_REALTIME_TOKEN);
+        }
     }
     // Metode untuk inisialisasi Supabase Realtime
     static subscribeToRealtime(onData) {
