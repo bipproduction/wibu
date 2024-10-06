@@ -1,8 +1,4 @@
-import {
-  createClient,
-  RealtimeChannel,
-  SupabaseClient
-} from "@supabase/supabase-js";
+import { createClient, RealtimeChannel, SupabaseClient } from "@supabase/supabase-js";
 
 type RealtimeProps = {
   WIBU_REALTIME_TOKEN: string;
@@ -21,20 +17,23 @@ export class WibuRealtime {
   static init({
     WIBU_REALTIME_TOKEN,
     project,
-    url = "https://zyjixsbusgbbtvjogjho.supabase.co/"
+    url = "https://zyjixsbusgbbtvjogjho.supabase.co/",
   }: RealtimeProps) {
     this.project = project;
     if (!this.supabase) {
       this.supabase = createClient(url, WIBU_REALTIME_TOKEN);
+    } else {
+      console.warn("Realtime client is already initialized.");
     }
   }
 
-  // Metode untuk inisialisasi Supabase Realtime
+  // Metode untuk subscribe ke Supabase Realtime
   static subscribeToRealtime(onData: (data: any) => void) {
     if (!this.supabase || !this.project) {
       throw new Error("Realtime client or project not initialized.");
     }
 
+    // Subscribe to realtime events
     const channel = this.supabase
       .channel(this.project)
       .on(
@@ -54,8 +53,7 @@ export class WibuRealtime {
 
   // Metode untuk mengirim atau memperbarui data
   static async setData(
-    data: any,
-    id: string = "123e4567-e89b-12d3-a456-426614174000"
+    data: any
   ) {
     if (!this.supabase || !this.project) {
       throw new Error("Realtime client or project not initialized.");
@@ -63,8 +61,8 @@ export class WibuRealtime {
 
     try {
       const { status, error } = await this.supabase.from(this.project).upsert({
-        id, // ID bisa disesuaikan dengan skema data
-        data
+        id: "123e4567-e89b-12d3-a456-426614174000", // ID bisa disesuaikan dengan skema data
+        data,
       });
 
       if (error) {
@@ -84,7 +82,7 @@ export class WibuRealtime {
     if (this.channel && this.supabase) {
       this.supabase.removeChannel(this.channel);
       this.channel = null;
-      console.log("Realtime channel cleaned up");
+      console.log("Realtime channel cleaned up.");
     } else {
       console.warn("No channel to clean up.");
     }

@@ -7,17 +7,21 @@ class WibuRealtime {
     static channel = null;
     static project;
     // Inisialisasi Supabase dan project
-    static init({ WIBU_REALTIME_TOKEN, project, url = "https://zyjixsbusgbbtvjogjho.supabase.co/" }) {
+    static init({ WIBU_REALTIME_TOKEN, project, url = "https://zyjixsbusgbbtvjogjho.supabase.co/", }) {
         this.project = project;
         if (!this.supabase) {
             this.supabase = (0, supabase_js_1.createClient)(url, WIBU_REALTIME_TOKEN);
         }
+        else {
+            console.warn("Realtime client is already initialized.");
+        }
     }
-    // Metode untuk inisialisasi Supabase Realtime
+    // Metode untuk subscribe ke Supabase Realtime
     static subscribeToRealtime(onData) {
         if (!this.supabase || !this.project) {
             throw new Error("Realtime client or project not initialized.");
         }
+        // Subscribe to realtime events
         const channel = this.supabase
             .channel(this.project)
             .on("postgres_changes", { event: "*", schema: "public", table: this.project }, (payload) => {
@@ -30,14 +34,14 @@ class WibuRealtime {
         this.channel = channel;
     }
     // Metode untuk mengirim atau memperbarui data
-    static async setData(data, id = "123e4567-e89b-12d3-a456-426614174000") {
+    static async setData(data) {
         if (!this.supabase || !this.project) {
             throw new Error("Realtime client or project not initialized.");
         }
         try {
             const { status, error } = await this.supabase.from(this.project).upsert({
-                id, // ID bisa disesuaikan dengan skema data
-                data
+                id: "123e4567-e89b-12d3-a456-426614174000", // ID bisa disesuaikan dengan skema data
+                data,
             });
             if (error) {
                 console.error("Error upserting data:", error);
@@ -57,7 +61,7 @@ class WibuRealtime {
         if (this.channel && this.supabase) {
             this.supabase.removeChannel(this.channel);
             this.channel = null;
-            console.log("Realtime channel cleaned up");
+            console.log("Realtime channel cleaned up.");
         }
         else {
             console.warn("No channel to clean up.");

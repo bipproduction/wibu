@@ -9,9 +9,9 @@ export declare class WibuRealtime {
     static supabase: RealtimeClient | null;
     static channel: RealtimeChannel | null;
     static project: string;
-    static init({ WIBU_REALTIME_TOKEN, project, url }: RealtimeProps): void;
+    static init({ WIBU_REALTIME_TOKEN, project, url, }: RealtimeProps): void;
     static subscribeToRealtime(onData: (data: any) => void): void;
-    static setData(data: any, id?: string): Promise<{
+    static setData(data: any): Promise<{
         status: number;
         data: any;
     } | null>;
