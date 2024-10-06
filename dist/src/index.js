@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useWibuRealtime = exports.wibuMiddleware = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = void 0;
+exports.useWibuRealtime = exports.wibuMiddleware = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = exports.WibuRealtime = void 0;
+var wibu_realtime_1 = require("./lib/realtime/wibu_realtime");
+Object.defineProperty(exports, "WibuRealtime", { enumerable: true, get: function () { return wibu_realtime_1.WibuRealtime; } });
 var wibu_ai_chat_1 = require("./lib/ai/wibu_ai_chat");
 Object.defineProperty(exports, "wibuAiChat", { enumerable: true, get: function () { return wibu_ai_chat_1.wibuAiChat; } });
 var wibu_ai_generate_1 = require("./lib/ai/wibu_ai_generate");

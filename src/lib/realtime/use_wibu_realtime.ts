@@ -3,12 +3,12 @@ import {
   RealtimeChannel,
   SupabaseClient
 } from "@supabase/supabase-js";
-import { jwtVerify } from "jose";
 import { useEffect, useRef, useState } from "react";
 
 interface UseClientRealtimeProps {
   WIBU_REALTIME_TOKEN: string;
-  project: "sdm" | "hipmi";
+  project: "sdm" | "hipmi" | "test";
+  url?: string;
 }
 
 
@@ -18,7 +18,8 @@ interface UseClientRealtimeProps {
  */
 export function useWibuRealtime({
   WIBU_REALTIME_TOKEN,
-  project
+  project,
+  url = "https://zyjixsbusgbbtvjogjho.supabase.co/"
 }: UseClientRealtimeProps) {
   const supabaseRef = useRef<SupabaseClient | null>(null);
   const channelRef = useRef<RealtimeChannel | null>(null);
@@ -29,16 +30,7 @@ export function useWibuRealtime({
 
     const initializeRealtime = async () => {
       try {
-        const token =
-          "eyJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJodHRwczovL3p5aml4c2J1c2diYnR2am9namhvLnN1cGFiYXNlLmNvIiwia2V5IjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhZbUZ6WlNJc0luSmxaaUk2SW5wNWFtbDRjMkoxYzJkaVluUjJhbTluYW1odklpd2ljbTlzWlNJNkltRnViMjRpTENKcFlYUWlPakUzTWpZM016azFORFVzSW1WNGNDSTZNakEwTWpNeE5UVTBOWDAuakhOVzVQd2hqLUtYVVFPTXF6SUxhQXo2MmszeGxLRUw1WEtFNHhvUjdYYyJ9.liCfw07nhEx_us1tV82I_osAQZxcMlolsOBA016A6S0";
-
-        const { payload } = await jwtVerify(
-          token,
-          new TextEncoder().encode(WIBU_REALTIME_TOKEN)
-        );
-
-        const { url, key } = payload as any;
-        const supabase = createClient(url, key);
+        const supabase = createClient(url, WIBU_REALTIME_TOKEN);
         supabaseRef.current = supabase;
 
         const channel = supabase
@@ -76,7 +68,7 @@ export function useWibuRealtime({
   async function upsertData(val: Record<string, any>) {
     const supabase = supabaseRef.current;
     if (!supabase) {
-      console.error("Supabase client not initialized");
+      console.error("database client not initialized");
       return null;
     }
 
@@ -102,4 +94,4 @@ export function useWibuRealtime({
   }
 
   return [currentData, upsertData] as const;
-}undefined
+}

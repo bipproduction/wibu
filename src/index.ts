@@ -1,3 +1,4 @@
+export { WibuRealtime } from "./lib/realtime/wibu_realtime";
 export { wibuAiChat } from "./lib/ai/wibu_ai_chat";
 export { wibuAiGenerate } from "./lib/ai/wibu_ai_generate";
 export { sessionDelete } from "./lib/middleware/session_delete";

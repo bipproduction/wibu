@@ -32,7 +32,7 @@ The hook returns a tuple containing:
 ### Example Usage
 
 ```tsx
-import { useWibuRealtime } from './path/to/your/hook';
+import { useWibuRealtime } from 'wibu';
 
 const MyComponent = () => {
   // Initialize the hook with the token and project name
