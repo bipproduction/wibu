@@ -1,4 +1,8 @@
-import { createClient, RealtimeChannel, SupabaseClient } from "@supabase/supabase-js";
+import {
+  createClient,
+  RealtimeChannel,
+  SupabaseClient
+} from "@supabase/supabase-js";
 
 type RealtimeProps = {
   WIBU_REALTIME_TOKEN: string;
@@ -11,8 +15,8 @@ type RealtimeClient = SupabaseClient<any, "public", any>;
 
 /**
  * # GUIDE
- * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/-wibu-realtime.md)
- * 
+ * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/wibu-realtime.md)
+ *
  */
 export class WibuRealtime {
   static supabase: RealtimeClient | null = null;
@@ -29,7 +33,7 @@ export class WibuRealtime {
     this.project = project;
     if (!this.supabase) {
       this.supabase = createClient(url, WIBU_REALTIME_TOKEN);
-    } 
+    }
 
     const channel = this.supabase
       .channel(this.project)
@@ -46,14 +50,10 @@ export class WibuRealtime {
       .subscribe();
 
     this.channel = channel;
-
-
   }
 
   // Metode untuk mengirim atau memperbarui data
-  static async setData(
-    data: any
-  ) {
+  static async setData(data: any) {
     if (!this.supabase || !this.project) {
       throw new Error("Realtime client or project not initialized.");
     }
@@ -61,7 +61,7 @@ export class WibuRealtime {
     try {
       const { status, error } = await this.supabase.from(this.project).upsert({
         id: "123e4567-e89b-12d3-a456-426614174000", // ID bisa disesuaikan dengan skema data
-        data,
+        data
       });
 
       if (error) {
