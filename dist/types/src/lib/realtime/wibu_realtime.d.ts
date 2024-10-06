@@ -1,19 +1,20 @@
+import { RealtimeChannel, SupabaseClient } from "@supabase/supabase-js";
 type RealtimeProps = {
     WIBU_REALTIME_TOKEN: string;
     project: "sdm" | "hipmi" | "test";
     url?: string;
 };
+type RealtimeClient = SupabaseClient<any, "public", any>;
 export declare class WibuRealtime {
-    private supabase;
-    private channel;
-    private project;
-    constructor({ WIBU_REALTIME_TOKEN, project, url }: RealtimeProps);
-    onData: (data: any) => void;
-    setData(data: any): Promise<{
+    static supabase: RealtimeClient | null;
+    static channel: RealtimeChannel | null;
+    static project: string;
+    static init({ WIBU_REALTIME_TOKEN, project, url }: RealtimeProps): void;
+    static subscribeToRealtime(onData: (data: any) => void): void;
+    static setData(data: any, id?: string): Promise<{
         status: number;
         data: any;
     } | null>;
-    init(): void;
-    cleanup(): void;
+    static cleanup(): void;
 }
 export {};
