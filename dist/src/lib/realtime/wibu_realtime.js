@@ -7,21 +7,11 @@ class WibuRealtime {
     static channel = null;
     static project;
     // Inisialisasi Supabase dan project
-    static init({ WIBU_REALTIME_TOKEN, project, url = "https://zyjixsbusgbbtvjogjho.supabase.co/", }) {
+    static init({ WIBU_REALTIME_TOKEN, project, url = "https://zyjixsbusgbbtvjogjho.supabase.co/", onData }) {
         this.project = project;
         if (!this.supabase) {
             this.supabase = (0, supabase_js_1.createClient)(url, WIBU_REALTIME_TOKEN);
         }
-        else {
-            console.warn("Realtime client is already initialized.");
-        }
-    }
-    // Metode untuk subscribe ke Supabase Realtime
-    static subscribeToRealtime(onData) {
-        if (!this.supabase || !this.project) {
-            throw new Error("Realtime client or project not initialized.");
-        }
-        // Subscribe to realtime events
         const channel = this.supabase
             .channel(this.project)
             .on("postgres_changes", { event: "*", schema: "public", table: this.project }, (payload) => {

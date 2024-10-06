@@ -4,6 +4,7 @@ type RealtimeProps = {
   WIBU_REALTIME_TOKEN: string;
   project: "sdm" | "hipmi" | "test";
   url?: string;
+  onData: (data: any) => void;
 };
 
 type RealtimeClient = SupabaseClient<any, "public", any>;
@@ -18,22 +19,13 @@ export class WibuRealtime {
     WIBU_REALTIME_TOKEN,
     project,
     url = "https://zyjixsbusgbbtvjogjho.supabase.co/",
+    onData
   }: RealtimeProps) {
     this.project = project;
     if (!this.supabase) {
       this.supabase = createClient(url, WIBU_REALTIME_TOKEN);
-    } else {
-      console.warn("Realtime client is already initialized.");
-    }
-  }
+    } 
 
-  // Metode untuk subscribe ke Supabase Realtime
-  static subscribeToRealtime(onData: (data: any) => void) {
-    if (!this.supabase || !this.project) {
-      throw new Error("Realtime client or project not initialized.");
-    }
-
-    // Subscribe to realtime events
     const channel = this.supabase
       .channel(this.project)
       .on(
@@ -49,6 +41,8 @@ export class WibuRealtime {
       .subscribe();
 
     this.channel = channel;
+
+
   }
 
   // Metode untuk mengirim atau memperbarui data
