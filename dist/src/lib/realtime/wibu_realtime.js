@@ -4,7 +4,7 @@ exports.WibuRealtime = void 0;
 const supabase_js_1 = require("@supabase/supabase-js");
 /**
  * # GUIDE
- * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/-wibu-realtime.md)
+ * [useRealtime](https://github.com/bipproduction/wibu/blob/main/GUIDE/wibu-realtime.md)
  *
  */
 class WibuRealtime {
@@ -36,7 +36,7 @@ class WibuRealtime {
         try {
             const { status, error } = await this.supabase.from(this.project).upsert({
                 id: "123e4567-e89b-12d3-a456-426614174000", // ID bisa disesuaikan dengan skema data
-                data,
+                data
             });
             if (error) {
                 console.error("Error upserting data:", error);

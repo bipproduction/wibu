@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { verifyToken } from "./verify_token";
 
-function setCorsHeaders(res: NextResponse): NextResponse {
+function setCorsHeaders(res: NextResponse): void {
   res.headers.set("Access-Control-Allow-Origin", "*");
   res.headers.set(
     "Access-Control-Allow-Methods",
@@ -12,10 +12,10 @@ function setCorsHeaders(res: NextResponse): NextResponse {
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization"
   );
-  return res;
 }
 
-function handleCors(req: NextRequest): NextResponse | null {
+function handleCors(req: NextRequest, res: NextResponse): NextResponse {
+  setCorsHeaders(res);
   if (req.method === "OPTIONS") {
     return new NextResponse(null, {
       status: 204,
@@ -27,41 +27,64 @@ function handleCors(req: NextRequest): NextResponse | null {
       }
     });
   }
-  return null;
+  return res;
 }
 
-type WibuMiddlewareConfig = {
+export type WibuMiddlewareConfig = {
+  /**
+   * @example
+   * ['/auth/login', '/auth/register']
+   */
   publicRoutes: string[];
+  /**
+   * @example
+   * [/^\/api\/files\/\w+/]
+   */
   publicRoutePatterns: RegExp[];
+  /**
+   * @example
+   * '/auth/login'
+   */
   loginPath: string;
+  /**
+   * @example
+   * '/user'
+   */
   userPath: string;
+  /**
+   * @example
+   * '/api'
+   */
   apiPath: string;
+  /**
+   * @example
+   * 'your_session_key'
+   * */
   sessionKey: string;
+  /**
+   * @example
+   * '30bcb57df67b4d8496cde071bc3a4435'
+   * */
   encodedKey: string;
+  /**
+   * @example
+   * '/api/validation'
+   * */
   validationApiRoute: string;
 };
 
 /**
- * Wibu middleware for Next.js.
+ * Middleware untuk melakukan otentikasi dan menangani CORS pada permintaan.
  * @example
- * const config = {
- *   publicRoutes: ['/auth/login', '/auth/register'],
- *   publicRoutePatterns: [/^\/api\/files\/\w+/],
- *   loginPath: '/auth/login',
- *   userPath: '/user',
- *   apiPath: '/api',
- *   sessionKey: 'wibu_session',
- *   encodedKey: 'your_encoded_key',
- *   validationApiRoute: '/api/validate'
- * };
- *
+ * // Memanggil middleware dan menunggu responsnya
+ * const response = await wibuMiddleware( req: request, { config: WibuMiddlewareConfig });
  * // Konfigurasi buat middleware Next.js
  * export const config = {
  *   matcher: ["/((?!_next|static|favicon.ico).*)"]
  * };
  */
 export async function wibuMiddleware(
-  req: NextRequest,
+  req: NextRequest | any,
   {
     apiPath,
     loginPath,
@@ -75,39 +98,30 @@ export async function wibuMiddleware(
 ) {
   const { pathname } = req.nextUrl;
 
-  // CORS handling
-  const corsResponse = handleCors(req);
-  if (corsResponse) {
-    return setCorsHeaders(corsResponse);
-  }
-
-  // Skip authentication for public routes
   if (
     publicRoutes.includes(pathname) ||
     publicRoutePatterns.some((pattern) => pattern.test(pathname))
   ) {
-    return setCorsHeaders(NextResponse.next());
+    return handleCors(req, NextResponse.next());
   }
 
   const token =
     req.cookies.get(sessionKey)?.value ||
     req.headers.get("Authorization")?.split(" ")[1];
 
-  // Token verification
-  const user = await verifyToken({ token, encodedKey });
+  const user = await verifyToken({ token, encodedKey: encodedKey });
+
   if (!user) {
     if (pathname.startsWith(apiPath)) {
-      return setCorsHeaders(unauthorizedResponse());
+      return handleCors(req, unauthorizedResponse());
     }
-    return setCorsHeaders(NextResponse.redirect(new URL(loginPath, req.url)));
+    return handleCors(req, NextResponse.redirect(new URL(loginPath, req.url)));
   }
 
-  // Redirect authenticated user away from login page
   if (pathname === loginPath) {
-    return setCorsHeaders(NextResponse.redirect(new URL(userPath, req.url)));
+    return handleCors(req, NextResponse.redirect(new URL(userPath, req.url)));
   }
 
-  // Validate user access with external API
   const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
     headers: {
       "Content-Type": "application/json",
@@ -116,11 +130,10 @@ export async function wibuMiddleware(
   });
 
   if (!validationResponse.ok) {
-    return setCorsHeaders(unauthorizedResponse());
+    return handleCors(req, unauthorizedResponse());
   }
 
-  // Proceed with the request
-  return setCorsHeaders(NextResponse.next());
+  return handleCors(req, NextResponse.next());
 }
 
 function unauthorizedResponse(): NextResponse {

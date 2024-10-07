@@ -1,181 +1,23 @@
-Tentu! Berikut adalah **System Prompt** yang dirancang khusus untuk mendeteksi bagian kode yang ditandai dengan `@example`, menghasilkan konten pengganti yang relevan, dan mengembalikan hasilnya dalam format array objek `{ start: number, end: number, content: string }`. Hasil ini dapat langsung Anda gunakan dalam fungsi TypeScript untuk menggantikan bagian kode yang sesuai.
+Di Indonesia, terdapat regulasi terkait pemasangan sistem **sprinkler** dan alat pemadam kebakaran otomatis untuk memastikan keselamatan penghuni gedung. Beberapa aturan yang relevan antara lain:
 
----
+1. **Undang-Undang No. 28 Tahun 2002**: Mengatur keselamatan bangunan, termasuk kewajiban pemasangan sistem pemadam kebakaran otomatis di gedung-gedung berisiko tinggi.
 
-### **System Prompt**
+2. **Peraturan Menteri Pekerjaan Umum No. 26/PRT/M/2008**: Menetapkan persyaratan teknis sistem proteksi kebakaran, termasuk pemasangan sprinkler, untuk mencegah dan memadamkan kebakaran.
 
----
+3. **Peraturan Gubernur DKI Jakarta No. 143 Tahun 2016**: Mengatur manajemen keselamatan kebakaran, yang mencakup kewajiban pemasangan sistem pemadam kebakaran otomatis di gedung bertingkat, hotel, dan pusat perbelanjaan.
 
-*You are an advanced code processing assistant designed to analyze TypeScript or JavaScript code files. Your specific tasks are:*
+4. **Standar Nasional Indonesia (SNI)**: Seperti **SNI 03-3989-2000**, memberikan panduan tentang desain, pemasangan, dan pemeliharaan sistem sprinkler sesuai standar nasional.
 
-1. **Detect `@example` Tags**: Identify all comment blocks that contain the `@example` tag.
-2. **Determine Replacement Range**: For each detected `@example` tag, determine the start and end line numbers of the existing example content that needs to be replaced. If there is no existing example content, set `start` and `end` to the line number where `@example` is located.
-3. **Generate Replacement Content**: Create a relevant and practical code example that demonstrates the usage of the associated function, type, or object.
-4. **Output Replacement Instructions**: For each `@example` tag, output an object containing:
-    - `start`: The starting line number of the existing example content.
-    - `end`: The ending line number of the existing example content.
-    - `content`: The new example content to replace the existing one.
+### Luas dan Kriteria Ruangan untuk Pemasangan Sprinkler
 
-**Requirements:**
+1. **Luas Ruangan**:
+   - **Sprinkler Umum**: Melindungi area **12-21 m²**.
+   - **Sprinkler untuk Risiko Tinggi**: Melindungi area **9-12 m²**.
 
-- **Output Format**: The final output should be a JSON array of objects with the structure `{ "start": number, "end": number, "content": string }`.
-- **Line Numbering**: Line numbers start at 1.
-- **No Additional Information**: Only output the JSON array without any additional text or explanations.
-- **Preserve Code Integrity**: Do not alter any part of the code outside the `@example` sections.
-
----
-
-### **Contoh Tugas Input dan Output**
-
-**Input:**
-
-```typescript
-type MiddlewareConfig = {
-  publicRoute: string[];
-  publicRoutePatterns: RegExp[];
-  signinPath: string;
-  userPath: string;
-  apiRoute: string;
-  tokenKey: string;
-  exp: string;
-};
-
-/**
- * @example
- * const config: MiddlewareConfig = {
- *   publicRoute: ["/", "/auth/login", "/auth/register"],
- *   publicRoutePatterns: [/^\/api\/files\/\w+/],
- *   signinPath: "/auth/login",
- *   userPath: "/user",
- *   apiRoute: "/api",
- *   tokenKey: "ws_token",
- *   exp: "7d"
- * };
- */
-export async function wibuMiddleware(req: NextRequest, middlewareConfig: MiddlewareConfig) {
-  const { pathname } = req.nextUrl;
-
-  if (
-    middlewareConfig.publicRoute.includes(pathname) ||
-    middlewareConfig.publicRoutePatterns.some((pattern) =>
-      pattern.test(pathname)
-    )
-  ) {
-    return handleCors(req, NextResponse.next());
-  }
-
-  const token =
-    req.cookies.get(middlewareConfig.tokenKey)?.value ||
-    req.headers.get("Authorization")?.split(" ")[1];
-  const user = await verifyToken(token);
-
-  if (!user) {
-    if (pathname.startsWith(middlewareConfig.apiRoute)) {
-      return handleCors(req, unauthorizedResponse());
-    }
-    return handleCors(
-      req,
-      NextResponse.redirect(new URL(middlewareConfig.signinPath, req.url))
-    );
-  }
-
-  if (pathname === middlewareConfig.signinPath) {
-    return handleCors(
-      req,
-      NextResponse.redirect(new URL(middlewareConfig.userPath, req.url))
-    );
-  }
-
-  return handleCors(req, NextResponse.next());
-}
-```
-
-**Expected Output:**
-
-```json
-[
-  {
-    "start": 7,
-    "end": 14,
-    "content": "const config: MiddlewareConfig = {\n  publicRoute: [\n    \"/\", \"/auth/login\", \"/auth/register\", \"/api/signin\", \"/api/register\"\n  ],\n  publicRoutePatterns: [/^\\/api\\/files\\/(\\w+)/],\n  signinPath: \"/auth/login\",\n  userPath: \"/user\",\n  apiRoute: \"/api\",\n  tokenKey: \"ws_token\",\n  exp: \"7y\" // Token expiration set to 7 years\n};"
-  }
-]
-```
-
-**Penjelasan:**
-
-- **Deteksi `@example`**: AI menemukan bahwa `@example` berada pada baris ke-6.
-- **Penentuan Rentang**: Contoh yang ada mulai dari baris ke-7 hingga baris ke-14.
-- **Konten Pengganti**: AI menghasilkan contoh konfigurasi `MiddlewareConfig` yang diperluas dengan rute tambahan dan komentar pada waktu kedaluwarsa token.
-
----
-
-### **Petunjuk Penggunaan**
-
-1. **Input Kode**: Berikan kode sumber TypeScript atau JavaScript yang mengandung tag `@example` dalam komentar.
-2. **Proses oleh AI**: AI akan memproses kode tersebut untuk mendeteksi semua tag `@example`, menentukan rentang baris yang perlu diganti, dan menghasilkan konten contoh yang baru.
-3. **Output Penggantian**: AI akan mengeluarkan sebuah array JSON yang berisi objek-objek dengan informasi `start`, `end`, dan `content` untuk setiap penggantian yang diperlukan.
-4. **Integrasi dengan TypeScript**: Gunakan array tersebut dalam fungsi TypeScript Anda untuk melakukan penggantian otomatis pada file kode.
-
----
-
-### **Contoh Fungsi TypeScript untuk Mengaplikasikan Penggantian**
-
-Berikut adalah contoh fungsi TypeScript yang mengambil kode sumber sebagai string dan daftar penggantian, lalu mengembalikan kode yang telah diperbarui:
-
-```typescript
-type Replacement = {
-  start: number;
-  end: number;
-  content: string;
-};
-
-function applyReplacements(code: string, replacements: Replacement[]): string {
-  const lines = code.split('\n');
-  // Sort replacements in reverse order to avoid messing up line numbers
-  replacements.sort((a, b) => b.start - a.start);
-  
-  for (const replacement of replacements) {
-    const before = lines.slice(0, replacement.start - 1).join('\n');
-    const after = lines.slice(replacement.end).join('\n');
-    const newCode = `${before}\n${replacement.content}\n${after}`;
-    code = newCode;
-  }
-
-  return code;
-}
-```
-
-**Cara Menggunakan:**
-
-1. **Dapatkan Output AI**: Setelah mendapatkan array JSON dari AI, parse JSON tersebut menjadi objek JavaScript.
-2. **Panggil Fungsi**: Gunakan fungsi `applyReplacements` dengan memberikan kode sumber dan daftar penggantian.
-3. **Perbarui File Kode**: Simpan hasil yang dikembalikan oleh fungsi sebagai file kode yang telah diperbarui.
-
-**Contoh Penggunaan:**
-
-```typescript
-const originalCode = `...`; // Kode asli Anda
-const replacements: Replacement[] = [
-  {
-    start: 7,
-    end: 14,
-    content: `const config: MiddlewareConfig = {
-  publicRoute: [
-    "/", "/auth/login", "/auth/register", "/api/signin", "/api/register"
-  ],
-  publicRoutePatterns: [/^\\/api\\/files\\/(\\w+)/],
-  signinPath: "/auth/login",
-  userPath: "/user",
-  apiRoute: "/api",
-  tokenKey: "ws_token",
-  exp: "7y" // Token expiration set to 7 years
-};`
-  }
-];
-
-const updatedCode = applyReplacements(originalCode, replacements);
-console.log(updatedCode);
-```
-
-Dengan **System Prompt** ini, AI akan secara efisien mendeteksi dan menghasilkan konten pengganti untuk bagian-bagian yang ditandai dengan `@example`, memungkinkan Anda untuk memperbarui dokumentasi kode secara otomatis dan konsisten.
+2. **Kriteria Ruangan**:
+   - **Gedung Bertingkat dan Komersial**: Harus dilengkapi pada setiap lantai, terutama di area publik.
+   - **Gudang dan Penyimpanan**: Wajib untuk ruangan berisiko tinggi.
+   - **Ruang Teknis dan Utilitas**: Termasuk ruang server dan ruang listrik.
+   - **Ruang Publik**: Seperti auditorium dan pusat konferensi.
+   - **Parkir Tertutup**: Terutama di area parkir bawah tanah.
+   - **Dapur Komersial**: Diperlukan perlindungan khusus.

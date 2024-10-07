@@ -7,9 +7,9 @@ function setCorsHeaders(res) {
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    return res;
 }
-function handleCors(req, res) {
-    setCorsHeaders(res);
+function handleCors(req) {
     if (req.method === "OPTIONS") {
         return new server_1.NextResponse(null, {
             status: 204,
@@ -21,80 +21,65 @@ function handleCors(req, res) {
             }
         });
     }
-    return res;
+    return null;
 }
 /**
- * Middleware untuk melakukan otentikasi dan menangani CORS pada permintaan.
- *
- * @param {Object} param - Parameter fungsi.
- * @param {NextRequest} param.req - Objek permintaan dari Next.js.
- * @param {WibuMiddlewareConfig} param.config - Konfigurasi middleware yang berisi informasi routing dan pengaturan lainnya.
- * Contoh:
- * ```js
- * {
- *   publicRoute: ['/auth/login', '/auth/register'], // Route yang bisa diakses tanpa otentikasi
- *   publicRoutePatterns: [/^\/api\/files\/\w+/], // Pola regex untuk route umum
- *   signinPath: '/auth/login', // Route untuk halaman login
- *   userPath: '/user', // Rute untuk halaman pengguna setelah login
- *   apiPath: '/api', // Rute dasar untuk API
- *   tokenName: 'ws_token', // Nama token yang akan dicari di cookie
- *   exp: '1h' // Waktu kedaluwarsa token
- * }
- * ```
- * @param {Uint8Array} param.encodedKey - Kunci yang digunakan untuk verifikasi token di JWT, dalam format Uint8Array.
- * @returns {Promise<NextResponse>} - Mengembalikan objek NextResponse berdasarkan status otentikasi pengguna.
- *
+ * Wibu middleware for Next.js.
  * @example
- * // Contoh penggunaan dalam proyek Next.js:
- *
- * import { wibuMiddleware } from './path/to/your/file';
- * import { NextRequest } from 'next/server';
- *
- * // Membuat objek request untuk pengujian
- * const request = new NextRequest('http://localhost/api/private', {
- *   method: 'GET',
- *   headers: { Authorization: 'Bearer your-jwt-token' } // Sertakan token JWT di header Authorization
- * });
- *
- * // Konfigurasi middleware yang akan digunakan
  * const config = {
- *   publicRoute: ['/auth/login', '/auth/register'], // Route yang dapat diakses tanpa otentikasi
- *   publicRoutePatterns: [/^\/api\/files\/\w+/], // Pola regex untuk mengenali route umum
- *   signinPath: '/auth/login', // Route untuk halaman login
- *   userPath: '/user', // Route untuk halaman pengguna setelah login
- *   apiPath: '/api', // Route dasar untuk API
- *   tokenName: 'ws_token', // Nama token yang akan dicari dari cookie
- *   exp: '1h' // Waktu kedaluwarsa token
+ *   publicRoutes: ['/auth/login', '/auth/register'],
+ *   publicRoutePatterns: [/^\/api\/files\/\w+/],
+ *   loginPath: '/auth/login',
+ *   userPath: '/user',
+ *   apiPath: '/api',
+ *   sessionKey: 'wibu_session',
+ *   encodedKey: 'your_encoded_key',
+ *   validationApiRoute: '/api/validate'
  * };
  *
- * // Kunci yang digunakan untuk verifikasi JWT
- * const secretKey = new TextEncoder().encode('your-secret-key'); // Mengonversi kunci rahasia menjadi Uint8Array
- *
- * // Memanggil middleware dan menunggu responsnya
- * const response = await wibuMiddleware({ req: request, config, encodedKey: secretKey });
- *
- * // Menampilkan hasil respons dari middleware, bisa berisi data yang diinginkan atau status otorisasi
- * console.log(response);
+ * // Konfigurasi buat middleware Next.js
+ * export const config = {
+ *   matcher: ["/((?!_next|static|favicon.ico).*)"]
+ * };
  */
-async function wibuMiddleware(req, config) {
+async function wibuMiddleware(req, { apiPath, loginPath, userPath, encodedKey, publicRoutes, publicRoutePatterns, sessionKey, validationApiRoute }) {
     const { pathname } = req.nextUrl;
-    if (config.publicRoutes.includes(pathname) ||
-        config.publicRoutePatterns.some((pattern) => pattern.test(pathname))) {
-        return handleCors(req, server_1.NextResponse.next());
+    // CORS handling
+    const corsResponse = handleCors(req);
+    if (corsResponse) {
+        return setCorsHeaders(corsResponse);
     }
-    const token = req.cookies.get(config.sessionKey)?.value ||
+    // Skip authentication for public routes
+    if (publicRoutes.includes(pathname) ||
+        publicRoutePatterns.some((pattern) => pattern.test(pathname))) {
+        return setCorsHeaders(server_1.NextResponse.next());
+    }
+    const token = req.cookies.get(sessionKey)?.value ||
         req.headers.get("Authorization")?.split(" ")[1];
-    const user = await (0, verify_token_1.verifyToken)({ token, encodedKey: config.encodedKey });
+    // Token verification
+    const user = await (0, verify_token_1.verifyToken)({ token, encodedKey });
     if (!user) {
-        if (pathname.startsWith(config.apiPath)) {
-            return handleCors(req, unauthorizedResponse());
+        if (pathname.startsWith(apiPath)) {
+            return setCorsHeaders(unauthorizedResponse());
         }
-        return handleCors(req, server_1.NextResponse.redirect(new URL(config.loginPath, req.url)));
+        return setCorsHeaders(server_1.NextResponse.redirect(new URL(loginPath, req.url)));
     }
-    if (pathname === config.loginPath) {
-        return handleCors(req, server_1.NextResponse.redirect(new URL(config.userPath, req.url)));
+    // Redirect authenticated user away from login page
+    if (pathname === loginPath) {
+        return setCorsHeaders(server_1.NextResponse.redirect(new URL(userPath, req.url)));
     }
-    return handleCors(req, server_1.NextResponse.next());
+    // Validate user access with external API
+    const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        }
+    });
+    if (!validationResponse.ok) {
+        return setCorsHeaders(unauthorizedResponse());
+    }
+    // Proceed with the request
+    return setCorsHeaders(server_1.NextResponse.next());
 }
 function unauthorizedResponse() {
     return new server_1.NextResponse(JSON.stringify({ error: "Unauthorized" }), {
