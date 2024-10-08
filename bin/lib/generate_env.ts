@@ -34,22 +34,11 @@ const envClientClass = dedent`
     }
   `;
 
-// const envProviderText = dedent`
-//     import { EnvClientProvider } from "./client/EnvClient";
-//     import { EnvServer } from "./server/EnvServer";
-
-//     export function EnvProvider({ env }: { env?:string }) {
-//       const jsonEnv = env ? JSON.parse(env) : {};
-//       EnvServer.init(jsonEnv);
-
-//       return <EnvClientProvider env={env} />;
-//     }
-
-//   `;
 
 export async function generateEnv() {
   await fs.mkdir(path.join(root, "src/lib/client"), { recursive: true });
   await fs.mkdir(path.join(root, "src/lib/server"), { recursive: true });
+  await fs.mkdir(path.join(root, "src/types"), { recursive: true });
   const log = loading("loading ...").start();
   const env = dotenv.parse(await fs.readFile(path.join(root, ".env"), "utf8"));
   const key = Object.keys(env);
