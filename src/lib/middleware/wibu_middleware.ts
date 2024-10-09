@@ -76,6 +76,7 @@ export async function wibuMiddleware(
     }
   ) {
     const { pathname } = req.nextUrl;
+    console.log(pathname);
   
     // CORS handling
     const corsResponse = handleCors(req);
