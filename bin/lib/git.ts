@@ -71,7 +71,7 @@ export async function push(branch?: string) {
 
   try {
     await execPromise(
-      `npx standard-version --yes --tag-prefix "" --release-as ${branchName} && git add -A && git commit --file="${tmpFilePath}" && git push origin ${branchName}`
+      `npx standard-version --yes  && git add -A && git commit --file="${tmpFilePath}" && git push origin ${branchName}`
     );
 
     log.succeed("success to push commit branch " + branchName);
