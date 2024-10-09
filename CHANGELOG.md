@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.30](https://github.com/bipproduction/package-template/compare/v0.1.29...v0.1.30) (2024-10-09)
+
+
+### Features
+
+* **middleware:** add middleware logging ([5417c96](https://github.com/bipproduction/package-template/commit/5417c96ed76282f86b90371ee0152df744bd0406))
+
 ### [0.1.29](https://github.com/bipproduction/package-template/compare/v0.1.28...v0.1.29) (2024-10-09)
 
 
