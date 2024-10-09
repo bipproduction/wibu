@@ -1,6 +1,6 @@
 {
   "name": "wibu",
-  "version": null,
+  "version": "0.1.21",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "bin": {
