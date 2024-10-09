@@ -12,7 +12,7 @@ import dedent from "dedent";
 const program = new Command();
 
 program
-  .version("1.0.0") // Ganti dengan versi yang sesuai
+  .version("1.0.1") // Ganti dengan versi yang sesuai
   .description("CLI untuk berbagai perintah utilitas wibu");
 
 // Command: pwa-install

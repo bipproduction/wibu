@@ -120,6 +120,8 @@ export async function wibuMiddleware(
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     }
+  }).catch(() => {
+    throw new Error("Failed to validate user access");
   });
 
   if (!validationResponse.ok) {
