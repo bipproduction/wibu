@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { verifyToken } from "./verify_token";
+import "colors";
 
 function setCorsHeaders(res: NextResponse): NextResponse {
   res.headers.set("Access-Control-Allow-Origin", "*");
@@ -28,6 +29,15 @@ function handleCors(req: NextRequest): NextResponse | null {
     });
   }
   return null;
+}
+
+function printLog(
+  log: boolean,
+  title: string = "==>",
+  text: string,
+  color: string = "yellow"
+) {
+  log && console.log(title.yellow, text);
 }
 
 /**
@@ -78,12 +88,12 @@ export async function wibuMiddleware(
   }
 ) {
   const { pathname } = req.nextUrl;
-  log && console.log(pathname);
+  printLog(log, `middleware: ${pathname}`);
 
   // CORS handling
   const corsResponse = handleCors(req);
   if (corsResponse) {
-    log && console.log("cors");
+    printLog(log, "cors response", "green");
     return setCorsHeaders(corsResponse);
   }
 
@@ -93,10 +103,10 @@ export async function wibuMiddleware(
     return new RegExp(`^${pattern}$`).test(pathname);
   });
 
-  log && console.log("isPublicRoute", isPublicRoute);
+  printLog(log, `isPublicRoute: ${isPublicRoute}`);
 
   if (isPublicRoute) {
-    log && console.log("public route");
+    printLog(log, "public route", "green");
     return setCorsHeaders(NextResponse.next());
   }
 
@@ -107,20 +117,21 @@ export async function wibuMiddleware(
   // Token verification
   const user = await verifyToken({ token, encodedKey });
 
-  log && console.log("user", user);
+  printLog(log, `user: ${JSON.stringify(user)}`);
   if (!user) {
-    log && console.log("unauthorized");
+    printLog(log, "unauthorized", "red");
     if (pathname.startsWith(apiPath)) {
-      log && console.log("unauthorized api");
+      printLog(log, "unauthorized api");
       return setCorsHeaders(unauthorizedResponse());
     }
-    log && console.log("unauthorized public");
+
+    printLog(log, "redirect to login path");
     return setCorsHeaders(NextResponse.redirect(new URL(loginPath, req.url)));
   }
 
   // Redirect authenticated user away from login page
   if (user && pathname === loginPath) {
-    log && console.log("redirect to user path");
+    printLog(log, "redirect to user path");
     return setCorsHeaders(NextResponse.redirect(new URL(userPath, req.url)));
   }
 
@@ -130,14 +141,14 @@ export async function wibuMiddleware(
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     }
-  })
+  });
 
   if (!validationResponse.ok) {
-    log && console.log("unauthorized validation");
+    printLog(log, "unauthorized", "red");
     return setCorsHeaders(unauthorizedResponse());
   }
 
-  log && console.log("authorized");
+  printLog(log, "authorized", "green");
   // Proceed with the request
   return setCorsHeaders(NextResponse.next());
 }
