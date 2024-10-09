@@ -56,80 +56,91 @@ export const config = {
 
  */
 export async function wibuMiddleware(
-    req: NextRequest,
-    {
-      apiPath = "/api",
-      loginPath = "/login",
-      userPath = "/user",
-      encodedKey,
-      publicRoutes = ["/", "/login", "/register"],
-      sessionKey,
-      validationApiRoute = "/api/validate"
-    }: {
-      apiPath?: string;
-      loginPath?: string;
-      userPath?: string;
-      encodedKey: string;
-      publicRoutes?: string[];
-      sessionKey: string;
-      validationApiRoute?: string;
-    }
-  ) {
-    const { pathname } = req.nextUrl;
-    console.log(pathname);
-  
-    // CORS handling
-    const corsResponse = handleCors(req);
-    if (corsResponse) {
-      return setCorsHeaders(corsResponse);
-    }
-  
-    // Skip authentication for public routes
-    const isPublicRoute = publicRoutes.some((route) => {
-      const pattern = route.replace(/\*/g, ".*");
-      return new RegExp(`^${pattern}$`).test(pathname);
-    });
-  
-    if (isPublicRoute) {
-      return setCorsHeaders(NextResponse.next());
-    }
-  
-    const token =
-      req.cookies.get(sessionKey)?.value ||
-      req.headers.get("Authorization")?.split(" ")[1];
-  
-    // Token verification
-    const user = await verifyToken({ token, encodedKey });
-    if (!user) {
-      if (pathname.startsWith(apiPath)) {
-        return setCorsHeaders(unauthorizedResponse());
-      }
-      return setCorsHeaders(NextResponse.redirect(new URL(loginPath, req.url)));
-    }
-  
-    // Redirect authenticated user away from login page
-    if (user && pathname === loginPath) {
-      return setCorsHeaders(NextResponse.redirect(new URL(userPath, req.url)));
-    }
-  
-    // Validate user access with external API
-    const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    }).catch(() => {
-      throw new Error("/api/validate API request failed");
-    });
-  
-    if (!validationResponse.ok) {
-      return setCorsHeaders(unauthorizedResponse());
-    }
-  
-    // Proceed with the request
+  req: NextRequest,
+  {
+    apiPath = "/api",
+    loginPath = "/login",
+    userPath = "/user",
+    encodedKey,
+    publicRoutes = ["/", "/login", "/register"],
+    sessionKey,
+    validationApiRoute = "/api/validate",
+    log = false
+  }: {
+    apiPath?: string;
+    loginPath?: string;
+    userPath?: string;
+    encodedKey: string;
+    publicRoutes?: string[];
+    sessionKey: string;
+    validationApiRoute?: string;
+    log?: boolean;
+  }
+) {
+  const { pathname } = req.nextUrl;
+  log && console.log(pathname);
+
+  // CORS handling
+  const corsResponse = handleCors(req);
+  if (corsResponse) {
+    log && console.log("cors");
+    return setCorsHeaders(corsResponse);
+  }
+
+  // Skip authentication for public routes
+  const isPublicRoute = publicRoutes.some((route) => {
+    const pattern = route.replace(/\*/g, ".*");
+    return new RegExp(`^${pattern}$`).test(pathname);
+  });
+
+  log && console.log("isPublicRoute", isPublicRoute);
+
+  if (isPublicRoute) {
+    log && console.log("public route");
     return setCorsHeaders(NextResponse.next());
   }
-  
+
+  const token =
+    req.cookies.get(sessionKey)?.value ||
+    req.headers.get("Authorization")?.split(" ")[1];
+
+  // Token verification
+  const user = await verifyToken({ token, encodedKey });
+
+  log && console.log("user", user);
+  if (!user) {
+    log && console.log("unauthorized");
+    if (pathname.startsWith(apiPath)) {
+      log && console.log("unauthorized api");
+      return setCorsHeaders(unauthorizedResponse());
+    }
+    log && console.log("unauthorized public");
+    return setCorsHeaders(NextResponse.redirect(new URL(loginPath, req.url)));
+  }
+
+  // Redirect authenticated user away from login page
+  if (user && pathname === loginPath) {
+    log && console.log("redirect to user path");
+    return setCorsHeaders(NextResponse.redirect(new URL(userPath, req.url)));
+  }
+
+  // Validate user access with external API
+  const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+
+  if (!validationResponse.ok) {
+    log && console.log("unauthorized validation");
+    return setCorsHeaders(unauthorizedResponse());
+  }
+
+  log && console.log("authorized");
+  // Proceed with the request
+  return setCorsHeaders(NextResponse.next());
+}
 
 function unauthorizedResponse(): NextResponse {
   return new NextResponse(JSON.stringify({ error: "Unauthorized" }), {

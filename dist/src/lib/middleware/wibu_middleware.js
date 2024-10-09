@@ -48,11 +48,13 @@ export const config = {
 };
 
  */
-async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", userPath = "/user", encodedKey, publicRoutes = ["/", "/login", "/register"], sessionKey, validationApiRoute = "/api/validate" }) {
+async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", userPath = "/user", encodedKey, publicRoutes = ["/", "/login", "/register"], sessionKey, validationApiRoute = "/api/validate", log = false }) {
     const { pathname } = req.nextUrl;
+    log && console.log(pathname);
     // CORS handling
     const corsResponse = handleCors(req);
     if (corsResponse) {
+        log && console.log("cors");
         return setCorsHeaders(corsResponse);
     }
     // Skip authentication for public routes
@@ -60,21 +62,28 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         const pattern = route.replace(/\*/g, ".*");
         return new RegExp(`^${pattern}$`).test(pathname);
     });
+    log && console.log("isPublicRoute", isPublicRoute);
     if (isPublicRoute) {
+        log && console.log("public route");
         return setCorsHeaders(server_1.NextResponse.next());
     }
     const token = req.cookies.get(sessionKey)?.value ||
         req.headers.get("Authorization")?.split(" ")[1];
     // Token verification
     const user = await (0, verify_token_1.verifyToken)({ token, encodedKey });
+    log && console.log("user", user);
     if (!user) {
+        log && console.log("unauthorized");
         if (pathname.startsWith(apiPath)) {
+            log && console.log("unauthorized api");
             return setCorsHeaders(unauthorizedResponse());
         }
+        log && console.log("unauthorized public");
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(loginPath, req.url)));
     }
     // Redirect authenticated user away from login page
     if (user && pathname === loginPath) {
+        log && console.log("redirect to user path");
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(userPath, req.url)));
     }
     // Validate user access with external API
@@ -83,12 +92,12 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         }
-    }).catch(() => {
-        throw new Error("/api/validate API request failed");
     });
     if (!validationResponse.ok) {
+        log && console.log("unauthorized validation");
         return setCorsHeaders(unauthorizedResponse());
     }
+    log && console.log("authorized");
     // Proceed with the request
     return setCorsHeaders(server_1.NextResponse.next());
 }
