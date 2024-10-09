@@ -121,7 +121,7 @@ export async function wibuMiddleware(
       Authorization: `Bearer ${token}`
     }
   }).catch(() => {
-    throw new Error("Failed to validate user access");
+    throw new Error("/api/validate API request failed");
   });
 
   if (!validationResponse.ok) {
