@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.31](https://github.com/bipproduction/package-template/compare/v0.1.30...v0.1.31) (2024-10-09)
+
+
+### Features
+
+* remove unnecessary color from printLog ([b300886](https://github.com/bipproduction/package-template/commit/b3008869bf443ed893cfdb2c603b0323123dae5c))
+
 ### [0.1.30](https://github.com/bipproduction/package-template/compare/v0.1.29...v0.1.30) (2024-10-09)
 
 
