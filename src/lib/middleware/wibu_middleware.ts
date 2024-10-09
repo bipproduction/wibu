@@ -31,12 +31,7 @@ function handleCors(req: NextRequest): NextResponse | null {
   return null;
 }
 
-function printLog(
-  log: boolean,
-  text: string,
-  color: string = "yellow",
-  title?: string
-) {
+function printLog(log: boolean, text: string, title?: string) {
   log && console.log(title?.yellow || "==>".yellow, text);
 }
 
@@ -93,7 +88,7 @@ export async function wibuMiddleware(
   // CORS handling
   const corsResponse = handleCors(req);
   if (corsResponse) {
-    printLog(log, "cors response", "green");
+    printLog(log, "cors response");
     return setCorsHeaders(corsResponse);
   }
 
@@ -106,7 +101,7 @@ export async function wibuMiddleware(
   printLog(log, `isPublicRoute: ${isPublicRoute}`);
 
   if (isPublicRoute) {
-    printLog(log, "public route", "green");
+    printLog(log, "public route");
     return setCorsHeaders(NextResponse.next());
   }
 
@@ -119,7 +114,7 @@ export async function wibuMiddleware(
 
   printLog(log, `user: ${JSON.stringify(user)}`);
   if (!user) {
-    printLog(log, "unauthorized", "red");
+    printLog(log, "unauthorized");
     if (pathname.startsWith(apiPath)) {
       printLog(log, "unauthorized api");
       return setCorsHeaders(unauthorizedResponse());
@@ -144,11 +139,11 @@ export async function wibuMiddleware(
   });
 
   if (!validationResponse.ok) {
-    printLog(log, "unauthorized", "red");
+    printLog(log, "unauthorized");
     return setCorsHeaders(unauthorizedResponse());
   }
 
-  printLog(log, "authorized", "green");
+  printLog(log, "authorized");
   // Proceed with the request
   return setCorsHeaders(NextResponse.next());
 }
