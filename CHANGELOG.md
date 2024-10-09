@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.27](https://github.com/bipproduction/package-template/compare/v0.1.26...v0.1.27) (2024-10-09)
+
+
+### Features
+
+* Tambahkan logging di middleware wibu ([98501c8](https://github.com/bipproduction/package-template/commit/98501c887d7ec998d16515c05090f67e64d9c456))
+
 ### [0.1.26](https://github.com/bipproduction/package-template/compare/v0.1.25...v0.1.26) (2024-10-09)
 
 
