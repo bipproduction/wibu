@@ -33,11 +33,11 @@ function handleCors(req: NextRequest): NextResponse | null {
 
 function printLog(
   log: boolean,
-  title: string = "==>",
   text: string,
-  color: string = "yellow"
+  color: string = "yellow",
+  title?: string
 ) {
-  log && console.log(title.yellow, text);
+  log && console.log(title?.yellow || "==>".yellow, text);
 }
 
 /**

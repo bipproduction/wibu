@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.wibuMiddleware = wibuMiddleware;
 const server_1 = require("next/server");
 const verify_token_1 = require("./verify_token");
+require("colors");
 function setCorsHeaders(res) {
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -22,6 +23,9 @@ function handleCors(req) {
         });
     }
     return null;
+}
+function printLog(log, text, color = "yellow", title) {
+    log && console.log(title?.yellow || "==>".yellow, text);
 }
 /**
  * @example
@@ -50,11 +54,11 @@ export const config = {
  */
 async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", userPath = "/user", encodedKey, publicRoutes = ["/", "/login", "/register"], sessionKey, validationApiRoute = "/api/validate", log = false }) {
     const { pathname } = req.nextUrl;
-    log && console.log(pathname);
+    printLog(log, `middleware: ${pathname}`);
     // CORS handling
     const corsResponse = handleCors(req);
     if (corsResponse) {
-        log && console.log("cors");
+        printLog(log, "cors response", "green");
         return setCorsHeaders(corsResponse);
     }
     // Skip authentication for public routes
@@ -62,28 +66,28 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         const pattern = route.replace(/\*/g, ".*");
         return new RegExp(`^${pattern}$`).test(pathname);
     });
-    log && console.log("isPublicRoute", isPublicRoute);
+    printLog(log, `isPublicRoute: ${isPublicRoute}`);
     if (isPublicRoute) {
-        log && console.log("public route");
+        printLog(log, "public route", "green");
         return setCorsHeaders(server_1.NextResponse.next());
     }
     const token = req.cookies.get(sessionKey)?.value ||
         req.headers.get("Authorization")?.split(" ")[1];
     // Token verification
     const user = await (0, verify_token_1.verifyToken)({ token, encodedKey });
-    log && console.log("user", user);
+    printLog(log, `user: ${JSON.stringify(user)}`);
     if (!user) {
-        log && console.log("unauthorized");
+        printLog(log, "unauthorized", "red");
         if (pathname.startsWith(apiPath)) {
-            log && console.log("unauthorized api");
+            printLog(log, "unauthorized api");
             return setCorsHeaders(unauthorizedResponse());
         }
-        log && console.log("unauthorized public");
+        printLog(log, "redirect to login path");
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(loginPath, req.url)));
     }
     // Redirect authenticated user away from login page
     if (user && pathname === loginPath) {
-        log && console.log("redirect to user path");
+        printLog(log, "redirect to user path");
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(userPath, req.url)));
     }
     // Validate user access with external API
@@ -94,10 +98,10 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         }
     });
     if (!validationResponse.ok) {
-        log && console.log("unauthorized validation");
+        printLog(log, "unauthorized", "red");
         return setCorsHeaders(unauthorizedResponse());
     }
-    log && console.log("authorized");
+    printLog(log, "authorized", "green");
     // Proceed with the request
     return setCorsHeaders(server_1.NextResponse.next());
 }
