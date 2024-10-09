@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.26](https://github.com/bipproduction/package-template/compare/v0.1.25...v0.1.26) (2024-10-09)
+
+
+### Features
+
+* improve middleware route regex ([48f8c54](https://github.com/bipproduction/package-template/commit/48f8c54f19f30d875671e67b97944765a2447c12))
+
 ### [0.1.25](https://github.com/bipproduction/package-template/compare/v0.1.24...v0.1.25) (2024-10-09)
 
 
