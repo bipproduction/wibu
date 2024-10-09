@@ -1,4 +1,3 @@
-import { ai } from "../../src/lib/ai/ai";
 import fs from "fs/promises";
 import loading from "loading-cli";
 import { geminiAi } from "../../src/lib/ai/gemini_ai";

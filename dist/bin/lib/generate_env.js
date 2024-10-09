@@ -30,10 +30,15 @@ const envClientClass = (0, dedent_1.default) `
         this.env = env;
       }
     }
-    export function EnvClientProvider({ env }: { env?: string }) {
-      const jsonEnv = env ? JSON.parse(env) : {};
 
-      EnvClient.init(jsonEnv);
+    const localEnv = process.env;
+    export function EnvClientProvider({ env }: { env: string }) {
+      try {
+        const jsonEnv = env ? JSON.parse(env) : localEnv;
+        EnvClient.init(jsonEnv);
+      } catch (error) {
+        console.log(error);
+      }
       return null;
     }
   `;
@@ -53,14 +58,7 @@ async function generateEnv() {
     log.succeed("type env generated");
     await promises_1.default.writeFile(path_1.default.join(root, "src/lib/server/EnvServer.ts"), envServerText, "utf8");
     log.succeed("env server generated");
-    // await fs.writeFile(
-    //   path.join(root, "src/lib/EnvProvider.tsx"),
-    //   envProviderText,
-    //   "utf8"
-    // );
-    // log.succeed("env provider generated");
     await promises_1.default.writeFile(path_1.default.join(root, "src/lib/client/EnvClient.ts"), envClientClass, "utf8");
-    log.succeed("env client generated");
     log.succeed("env client generated");
     log.stop();
 }

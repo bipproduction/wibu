@@ -24,25 +24,31 @@ function handleCors(req) {
     return null;
 }
 /**
- * Wibu middleware for Next.js.
  * @example
- * const config = {
- *   publicRoutes: ['/auth/login', '/auth/register'],
- *   publicRoutePatterns: [/^\/api\/files\/\w+/],
- *   loginPath: '/auth/login',
- *   userPath: '/user',
- *   apiPath: '/api',
- *   sessionKey: 'wibu_session',
- *   encodedKey: 'your_encoded_key',
- *   validationApiRoute: '/api/validate'
- * };
- *
- * // Konfigurasi buat middleware Next.js
- * export const config = {
- *   matcher: ["/((?!_next|static|favicon.ico).*)"]
- * };
+import { NextRequest } from "next/server";
+import { wibuMiddleware } from "wibu"; // Pastikan ini mengarah ke file yang benar
+import { EnvServer } from "./lib/server/EnvServer";
+
+// Inisialisasi environment
+EnvServer.init(process.env as any);
+
+export const middleware = async (req: NextRequest) =>
+  await wibuMiddleware(req, {
+    apiPath: "/api",
+    encodedKey: EnvServer.env.NEXT_PUBLICWA_SERVER_TOKEN_KEY,
+    loginPath: "/login",
+    publicRoutes: ["/login", "/api/*"], // Menambahkan rute publik di sini
+    sessionKey: EnvServer.env.NEXT_PUBLIC_WA_SERVER_SESSION_KEY,
+    userPath: "/user",
+    validationApiRoute: "/api/validate"
+  });
+
+export const config = {
+  matcher: ["/((?!_next|static|favicon.ico).*)"] // Menyertakan semua rute kecuali yang diabaikan
+};
+
  */
-async function wibuMiddleware(req, { apiPath, loginPath, userPath, encodedKey, publicRoutes, publicRoutePatterns, sessionKey, validationApiRoute }) {
+async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", userPath = "/user", encodedKey, publicRoutes = ["/", "/login", "/register"], sessionKey, validationApiRoute = "/api/validate" }) {
     const { pathname } = req.nextUrl;
     // CORS handling
     const corsResponse = handleCors(req);
@@ -50,8 +56,12 @@ async function wibuMiddleware(req, { apiPath, loginPath, userPath, encodedKey, p
         return setCorsHeaders(corsResponse);
     }
     // Skip authentication for public routes
-    if (publicRoutes.includes(pathname) ||
-        publicRoutePatterns.some((pattern) => pattern.test(pathname))) {
+    const isPublicRoute = publicRoutes.some((route) => {
+        return route.endsWith("/*")
+            ? new RegExp(`^${route.slice(0, -2).replace(/\//g, "\\/")}\\w+`).test(pathname)
+            : route === pathname;
+    });
+    if (isPublicRoute) {
         return setCorsHeaders(server_1.NextResponse.next());
     }
     const token = req.cookies.get(sessionKey)?.value ||

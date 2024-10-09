@@ -26,14 +26,18 @@ const envClientClass = dedent`
         this.env = env;
       }
     }
-    export function EnvClientProvider({ env }: { env?: string }) {
-      const jsonEnv = env ? JSON.parse(env) : {};
 
-      EnvClient.init(jsonEnv);
+    const localEnv = process.env;
+    export function EnvClientProvider({ env }: { env: string }) {
+      try {
+        const jsonEnv = env ? JSON.parse(env) : localEnv;
+        EnvClient.init(jsonEnv);
+      } catch (error) {
+        console.log(error);
+      }
       return null;
     }
   `;
-
 
 export async function generateEnv() {
   await fs.mkdir(path.join(root, "src/lib/client"), { recursive: true });
@@ -60,14 +64,6 @@ export async function generateEnv() {
   );
   log.succeed("env server generated");
 
-
-  // await fs.writeFile(
-  //   path.join(root, "src/lib/EnvProvider.tsx"),
-  //   envProviderText,
-  //   "utf8"
-  // );
-  // log.succeed("env provider generated");
-
   await fs.writeFile(
     path.join(root, "src/lib/client/EnvClient.ts"),
     envClientClass,
@@ -75,7 +71,5 @@ export async function generateEnv() {
   );
   log.succeed("env client generated");
 
-  log.succeed("env client generated");
   log.stop();
 }
-
