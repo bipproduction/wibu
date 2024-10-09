@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.25](https://github.com/bipproduction/package-template/compare/v0.1.24...v0.1.25) (2024-10-09)
+
+
+### Features
+
+* Perbaiki pesan error pada API validasi ([1d482e9](https://github.com/bipproduction/package-template/commit/1d482e997f1e68c33f2ed8423a03e7717fd4e827))
+
 ### [0.1.24](https://github.com/bipproduction/package-template/compare/v0.1.23...v0.1.24) (2024-10-09)
 
 
