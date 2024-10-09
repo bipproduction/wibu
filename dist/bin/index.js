@@ -38,7 +38,7 @@ const route_1 = require("./lib/route");
 const dedent_1 = __importDefault(require("dedent"));
 const program = new commander_1.Command();
 program
-    .version("1.0.0") // Ganti dengan versi yang sesuai
+    .version("1.0.1") // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");
 // Command: pwa-install
 program

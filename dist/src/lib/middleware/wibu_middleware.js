@@ -56,16 +56,13 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         return setCorsHeaders(corsResponse);
     }
     // Skip authentication for public routes
-    //   const isPublicRoute = publicRoutes.some((route) => {
-    //     return route.endsWith("/*")
-    //       ? new RegExp(`^${route.slice(0, -2).replace(/\//g, "\\/")}\\w+`).test(
-    //           pathname
-    //         )
-    //       : route === pathname;
-    //   });
-    //   if (isPublicRoute) {
-    //     return setCorsHeaders(NextResponse.next());
-    //   }
+    const isPublicRoute = publicRoutes.some((route) => {
+        const pattern = route.replace(/\*/g, ".*");
+        return new RegExp(`^${pattern}$`).test(pathname);
+    });
+    if (isPublicRoute) {
+        return setCorsHeaders(server_1.NextResponse.next());
+    }
     const token = req.cookies.get(sessionKey)?.value ||
         req.headers.get("Authorization")?.split(" ")[1];
     // Token verification
@@ -77,7 +74,7 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(loginPath, req.url)));
     }
     // Redirect authenticated user away from login page
-    if (pathname === loginPath) {
+    if (user && pathname === loginPath) {
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(userPath, req.url)));
     }
     // Validate user access with external API
@@ -86,6 +83,8 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
         }
+    }).catch(() => {
+        throw new Error("/api/validate API request failed");
     });
     if (!validationResponse.ok) {
         return setCorsHeaders(unauthorizedResponse());
