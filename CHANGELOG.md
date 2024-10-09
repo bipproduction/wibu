@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.24](https://github.com/bipproduction/package-template/compare/v0.1.23...v0.1.24) (2024-10-09)
+
+
+### Features
+
+* Perbarui versi CLI ([d79f861](https://github.com/bipproduction/package-template/commit/d79f8610bb1fff5bcbf6e0acd993139090ffbff7))
+
 ### [0.1.23](https://github.com/bipproduction/package-template/compare/v0.1.22...v0.1.23) (2024-10-09)
 
 
