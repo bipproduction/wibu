@@ -64,7 +64,7 @@ async function push(branch) {
     const tmpFilePath = path_1.default.join(os_1.default.tmpdir(), `commit_message.txt`);
     await promises_1.default.writeFile(tmpFilePath, text);
     try {
-        await execPromise(`git add -A && git commit --file="${tmpFilePath}" && git push origin ${branchName}`);
+        await execPromise(`npx standard-version --yes --tag-prefix "" --release-as ${branchName} && git add -A && git commit --file="${tmpFilePath}" && git push origin ${branchName}`);
         log.succeed("success to push commit branch " + branchName);
         log.stop();
     }
