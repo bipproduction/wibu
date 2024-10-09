@@ -84,17 +84,17 @@ export async function wibuMiddleware(
   }
 
   // Skip authentication for public routes
-  const isPublicRoute = publicRoutes.some((route) => {
-    return route.endsWith("/*")
-      ? new RegExp(`^${route.slice(0, -2).replace(/\//g, "\\/")}\\w+`).test(
-          pathname
-        )
-      : route === pathname;
-  });
+//   const isPublicRoute = publicRoutes.some((route) => {
+//     return route.endsWith("/*")
+//       ? new RegExp(`^${route.slice(0, -2).replace(/\//g, "\\/")}\\w+`).test(
+//           pathname
+//         )
+//       : route === pathname;
+//   });
 
-  if (isPublicRoute) {
-    return setCorsHeaders(NextResponse.next());
-  }
+//   if (isPublicRoute) {
+//     return setCorsHeaders(NextResponse.next());
+//   }
 
   const token =
     req.cookies.get(sessionKey)?.value ||
