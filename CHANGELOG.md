@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.32](https://github.com/bipproduction/package-template/compare/v0.1.31...v0.1.32) (2024-10-09)
+
+
+### Features
+
+* hapus dependency 'colors' ([3080683](https://github.com/bipproduction/package-template/commit/3080683ce76c7b04617caa951bd7d6d563a59127))
+
 ### [0.1.31](https://github.com/bipproduction/package-template/compare/v0.1.30...v0.1.31) (2024-10-09)
 
 
