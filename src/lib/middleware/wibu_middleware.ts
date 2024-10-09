@@ -92,7 +92,11 @@ export async function wibuMiddleware(
   }
 
   // Skip authentication for public routes
-  const isPublicRoute = publicRoutes.some((route) => {
+  const isPublicRoute = [
+    ...publicRoutes,
+    loginPath,
+    validationApiRoute
+  ].some((route) => {
     const pattern = route.replace(/\*/g, ".*");
     return new RegExp(`^${pattern}$`).test(pathname);
   });
