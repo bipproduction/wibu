@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import "colors";
 /**
  * @example
 import { NextRequest } from "next/server";

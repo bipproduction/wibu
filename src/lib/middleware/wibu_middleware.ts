@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { verifyToken } from "./verify_token";
-import "colors";
 
 function setCorsHeaders(res: NextResponse): NextResponse {
   res.headers.set("Access-Control-Allow-Origin", "*");
@@ -32,7 +31,7 @@ function handleCors(req: NextRequest): NextResponse | null {
 }
 
 function printLog(log: boolean, text: string, title?: string) {
-  log && console.log(title?.yellow || "==>".yellow, text);
+  log && console.log(title || "==>", text);
 }
 
 /**

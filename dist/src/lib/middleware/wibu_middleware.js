@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.wibuMiddleware = wibuMiddleware;
 const server_1 = require("next/server");
 const verify_token_1 = require("./verify_token");
-require("colors");
 function setCorsHeaders(res) {
     res.headers.set("Access-Control-Allow-Origin", "*");
     res.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -25,7 +24,7 @@ function handleCors(req) {
     return null;
 }
 function printLog(log, text, title) {
-    log && console.log(title?.yellow || "==>".yellow, text);
+    log && console.log(title || "==>", text);
 }
 /**
  * @example
