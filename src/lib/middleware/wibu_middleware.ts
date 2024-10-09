@@ -1,4 +1,4 @@
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { verifyToken } from "./verify_token";
 
@@ -44,14 +44,14 @@ export const middleware = async (req: NextRequest) =>
     apiPath: "/api",
     encodedKey: EnvServer.env.NEXT_PUBLICWA_SERVER_TOKEN_KEY,
     loginPath: "/login",
-    publicRoutes: ["/login", "/api/*"], // Menambahkan rute publik di sini
+    publicRoutes: ["/login", "/api/*"], // Menambahkan route publik di sini
     sessionKey: EnvServer.env.NEXT_PUBLIC_WA_SERVER_SESSION_KEY,
     userPath: "/user",
     validationApiRoute: "/api/validate"
   });
 
 export const config = {
-  matcher: ["/((?!_next|static|favicon.ico).*)"] // Menyertakan semua rute kecuali yang diabaikan
+  matcher: ["/((?!_next|static|favicon.ico).*)"] // Menyertakan semua route kecuali yang diabaikan
 };
 
  */
@@ -70,7 +70,7 @@ export async function wibuMiddleware(
     loginPath?: string;
     userPath?: string;
     encodedKey: string;
-    publicRoutes: string[];
+    publicRoutes?: string[];
     sessionKey: string;
     validationApiRoute?: string;
   }
