@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.35](https://github.com/bipproduction/package-template/compare/v0.1.34...v0.1.35) (2024-10-10)
+
+
+### Features
+
+* Tambah middleware dan hook nextjs ([b702b88](https://github.com/bipproduction/package-template/commit/b702b885f4dae4b455cb7885315d58963e1d62f7))
+
 ### [0.1.34](https://github.com/bipproduction/package-template/compare/v0.1.33...v0.1.34) (2024-10-10)
 
 
