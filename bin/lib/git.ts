@@ -36,7 +36,7 @@ export async function push(branch?: string) {
   const branchName = branch || currentBranch.stdout.trim();
 
   let { stdout } = await execPromise(
-    "git diff --stat --unified=1 --ignore-space-change --diff-filter=ACMRT"
+    "git diff --stat --unified=1 --ignore-space-change --diff-filter=ACMRT && git status"
   );
   const { length } = encoder.encode(stdout);
   if (length === 0) {
