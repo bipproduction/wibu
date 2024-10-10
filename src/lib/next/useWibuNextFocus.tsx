@@ -9,14 +9,14 @@ interface WibuMutableRefObject<T> {
 }
 
 export function useWibuNextFocus() {
-  const ref: WibuMutableRefObject<WibuHTMLInputElement[]> = useRef([]);
+  const ref = useRef([]);
   const wibuNext = (
-    wibuRef: WibuMutableRefObject<WibuHTMLInputElement[]>,
+    wibuRef: any,
     index: number
   ) => ({
-    ref: (el: WibuHTMLInputElement | null) =>
+    ref: (el: any) =>
       el && ((wibuRef.current[index] = el) as any),
-    onKeyDown: (e: KeyboardEvent<WibuHTMLInputElement>) => {
+    onKeyDown: (e: any) => {
       try {
         e.key === "Enter" && wibuRef.current[index + 1].focus();
       } catch (error) {
