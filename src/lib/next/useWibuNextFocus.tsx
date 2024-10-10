@@ -8,7 +8,7 @@ interface WibuMutableRefObject<T> {
   current: T;
 }
 
-export function useWibuNextFocus() {
+export function useWibuNextFocus(log: boolean = false) {
   const ref: WibuMutableRefObject<WibuHTMLInputElement[]> = useRef([]);
   const wibuNext = (
     wibuRef: WibuMutableRefObject<WibuHTMLInputElement[]>,
@@ -20,7 +20,7 @@ export function useWibuNextFocus() {
       try {
         e.key === "Enter" && wibuRef.current[index + 1].focus();
       } catch (error) {
-        console.log("end of input");
+        log && console.log("end of input");
       }
     }
   });

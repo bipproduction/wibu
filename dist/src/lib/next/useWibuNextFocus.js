@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useWibuNextFocus = useWibuNextFocus;
 const react_1 = require("react");
-function useWibuNextFocus() {
+function useWibuNextFocus(log = false) {
     const ref = (0, react_1.useRef)([]);
     const wibuNext = (wibuRef, index) => ({
         ref: (el) => el && (wibuRef.current[index] = el),
@@ -11,7 +11,7 @@ function useWibuNextFocus() {
                 e.key === "Enter" && wibuRef.current[index + 1].focus();
             }
             catch (error) {
-                console.log("end of input");
+                log && console.log("end of input");
             }
         }
     });

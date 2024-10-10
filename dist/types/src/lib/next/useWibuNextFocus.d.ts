@@ -5,7 +5,7 @@ type WibuHTMLInputElement = {
 interface WibuMutableRefObject<T> {
     current: T;
 }
-export declare function useWibuNextFocus(): readonly [WibuMutableRefObject<WibuHTMLInputElement[]>, (wibuRef: WibuMutableRefObject<WibuHTMLInputElement[]>, index: number) => {
+export declare function useWibuNextFocus(log?: boolean): readonly [WibuMutableRefObject<WibuHTMLInputElement[]>, (wibuRef: WibuMutableRefObject<WibuHTMLInputElement[]>, index: number) => {
     ref: (el: WibuHTMLInputElement | null) => any;
     onKeyDown: (e: KeyboardEvent<WibuHTMLInputElement>) => void;
 }];
