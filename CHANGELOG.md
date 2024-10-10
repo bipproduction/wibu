@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.36](https://github.com/bipproduction/package-template/compare/v0.1.35...v0.1.36) (2024-10-10)
+
+
+### Features
+
+* improve type definition for useWibuNextFocus ([c2c6ee4](https://github.com/bipproduction/package-template/commit/c2c6ee4b6153ef3b4b6b8e49ff99d80c706fe0ad))
+
 ### [0.1.35](https://github.com/bipproduction/package-template/compare/v0.1.34...v0.1.35) (2024-10-10)
 
 
