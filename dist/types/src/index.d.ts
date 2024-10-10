@@ -1,3 +1,5 @@
+export { useWibuNextFocus } from "./lib/next/useWibuNextFocus";
+export { wibuMiddleware } from "./lib/middleware/wibu_middleware";
 export { WibuRealtime } from "./lib/realtime/wibu_realtime";
 export { wibuAiChat } from "./lib/ai/wibu_ai_chat";
 export { wibuAiGenerate } from "./lib/ai/wibu_ai_generate";
@@ -6,5 +8,4 @@ export { waPinHandler } from "./lib/wa/wa_pin_handler";
 export { sessionCreate } from "./lib/middleware/session_create";
 export { decrypt } from "./lib/middleware/decrypt";
 export { encrypt } from "./lib/middleware/encrypt";
-export { wibuMiddleware } from "./lib/middleware/wibu_middleware";
 export { useWibuRealtime } from "./lib/realtime/use_wibu_realtime";

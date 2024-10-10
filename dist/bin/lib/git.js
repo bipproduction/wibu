@@ -37,7 +37,7 @@ async function push(branch) {
     const log = (0, loading_cli_1.default)("loading ...").start();
     const currentBranch = await execPromise("git branch --show-current");
     const branchName = branch || currentBranch.stdout.trim();
-    let { stdout } = await execPromise("git diff --stat --unified=1 --ignore-space-change --diff-filter=ACMRT");
+    let { stdout } = await execPromise("git diff --stat --unified=1 --ignore-space-change --diff-filter=ACMRT && git status");
     const { length } = gpt_3_encoder_1.default.encode(stdout);
     if (length === 0) {
         return log.fail("nothing to push");
