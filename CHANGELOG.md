@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.34](https://github.com/bipproduction/package-template/compare/v0.1.33...v0.1.34) (2024-10-10)
+
+
+### Features
+
+* Tambah perintah `git status` ([042e0d2](https://github.com/bipproduction/package-template/commit/042e0d2f57564536eeb154df27a5d3d95abc098c))
+
 ### [0.1.33](https://github.com/bipproduction/package-template/compare/v0.1.32...v0.1.33) (2024-10-10)
 
 
