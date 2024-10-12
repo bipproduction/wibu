@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.40](https://github.com/bipproduction/package-template/compare/v0.1.39...v0.1.40) (2024-10-12)
+
+
+### Features
+
+* **next:** update useWibuRef API ([4758a81](https://github.com/bipproduction/package-template/commit/4758a81a6d39305bf647a5dfeb69000b97db1471))
+
 ### [0.1.39](https://github.com/bipproduction/package-template/compare/v0.1.38...v0.1.39) (2024-10-12)
 
 
