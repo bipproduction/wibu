@@ -1,4 +1,4 @@
-export { useWibuNextFocus } from "./lib/next/useWibuNextFocus";
+export { useWibuRef } from "./lib/next/useWibuRef";
 export { wibuMiddleware } from "./lib/middleware/wibu_middleware";
 export { WibuRealtime } from "./lib/realtime/wibu_realtime";
 export { wibuAiChat } from "./lib/ai/wibu_ai_chat";

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useWibuRealtime = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = exports.WibuRealtime = exports.wibuMiddleware = exports.useWibuNextFocus = void 0;
-var useWibuNextFocus_1 = require("./lib/next/useWibuNextFocus");
-Object.defineProperty(exports, "useWibuNextFocus", { enumerable: true, get: function () { return useWibuNextFocus_1.useWibuNextFocus; } });
+exports.useWibuRealtime = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = exports.WibuRealtime = exports.wibuMiddleware = exports.useWibuRef = void 0;
+var useWibuRef_1 = require("./lib/next/useWibuRef");
+Object.defineProperty(exports, "useWibuRef", { enumerable: true, get: function () { return useWibuRef_1.useWibuRef; } });
 var wibu_middleware_1 = require("./lib/middleware/wibu_middleware");
 Object.defineProperty(exports, "wibuMiddleware", { enumerable: true, get: function () { return wibu_middleware_1.wibuMiddleware; } });
 var wibu_realtime_1 = require("./lib/realtime/wibu_realtime");
