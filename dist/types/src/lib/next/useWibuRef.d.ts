@@ -1,26 +1,20 @@
-import { KeyboardEvent } from "react";
-type WibuHTMLInputElement = HTMLInputElement;
-interface WibuMutableRefObject<T> {
-    current: T;
-}
+import { KeyboardEvent, MutableRefObject } from "react";
 /**
- * @example
- * const [ref, next, value] = useWibuRef({
-    name: "",
-    email: "",
-    password: ""
-  });
-  ...
-   <TextInput
-      {...next(ref, "email")}
-      placeholder="example: 0t3I5@example.com"
-      label="email"
-    />
+ * ### GUIDE
+ * [useWibuRef](https://github.com/bipproduction/wibu/tree/main/GUIDE/use-wibu-ref.md)
  */
-export declare function useWibuRef<Values extends Record<string, any>>(initialValue: Values, log?: boolean): readonly [WibuMutableRefObject<HTMLInputElement[]>, (wibuRef: WibuMutableRefObject<WibuHTMLInputElement[]>, name: keyof Values) => {
-    ref: (el: WibuHTMLInputElement | null) => void;
-    onKeyDown: (e: KeyboardEvent<WibuHTMLInputElement>) => void;
-    onChange: (e: React.ChangeEvent<WibuHTMLInputElement>) => void;
-    error: boolean;
-}, Values];
-export {};
+export declare function useWibuRef<Values extends Record<string, any>>({ initialRef, initialValue, log }: {
+    initialRef: MutableRefObject<any[]>;
+    initialValue: Values;
+    log?: boolean;
+}): {
+    readonly value: Values;
+    readonly wibuNext: (name: keyof Values) => {
+        ref: (el: HTMLInputElement | null) => void;
+        onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+        error: string | null;
+    };
+    readonly error: string | null;
+    readonly empty: boolean;
+};

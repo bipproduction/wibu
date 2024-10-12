@@ -3,12 +3,12 @@ import { encrypt } from "./encrypt";
 
 export async function sessionCreate({
   sessionKey,
-  exp,
+  exp = "7 year",
   encodedKey,
   user
 }: {
   sessionKey: string;
-  exp: string;
+  exp?: string;
   encodedKey: string;
   user: Record<string, unknown>;
 }) {

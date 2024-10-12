@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sessionCreate = sessionCreate;
 const headers_1 = require("next/headers");
 const encrypt_1 = require("./encrypt");
-async function sessionCreate({ sessionKey, exp, encodedKey, user }) {
+async function sessionCreate({ sessionKey, exp = "7 year", encodedKey, user }) {
     const token = await (0, encrypt_1.encrypt)({
         exp,
         encodedKey,
