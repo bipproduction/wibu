@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.38](https://github.com/bipproduction/package-template/compare/v0.1.37...v0.1.38) (2024-10-12)
+
+
+### Features
+
+* add log option to useWibuNextFocus ([ae240b1](https://github.com/bipproduction/package-template/commit/ae240b16c4f7ba0044f759a5b8580ffb8f2a55bb))
+
 ### [0.1.37](https://github.com/bipproduction/package-template/compare/v0.1.36...v0.1.37) (2024-10-10)
 
 
