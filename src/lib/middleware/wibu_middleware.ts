@@ -36,7 +36,7 @@ function printLog(log: boolean, text: string, title?: string) {
 
 /**
  * # GUIDE
- * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/wibu-middleware.md
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/wibu-midleware.md
  */
 export async function wibuMiddleware(
   req: NextRequest,

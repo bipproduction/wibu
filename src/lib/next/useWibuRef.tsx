@@ -1,8 +1,8 @@
 import { KeyboardEvent, MutableRefObject, useState } from "react";
 
 /**
- * ### GUIDE
- * [useWibuRef](https://github.com/bipproduction/wibu/tree/main/GUIDE/use-wibu-ref.md)
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/use-wibu-ref.md
  */
 export function useWibuRef<Values extends Record<string, any>>({
   initialRef,
