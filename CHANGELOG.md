@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.43](https://github.com/bipproduction/package-template/compare/v0.1.42...v0.1.43) (2024-10-20)
+
+
+### Features
+
+* tambahkan command gen-validate dan gen-webpush ([757715f](https://github.com/bipproduction/package-template/commit/757715feae02e9c1ea4e282281fa7b1f36eed32e))
+
 ### [0.1.42](https://github.com/bipproduction/package-template/compare/v0.1.41...v0.1.42) (2024-10-20)
 
 
