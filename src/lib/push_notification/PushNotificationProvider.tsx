@@ -18,6 +18,10 @@ class SendNotificationEndpoint {
   }
 }
 
+/**
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/push-notification.md
+ */
 export function usePushNotification() {
   const { value: subscription } = useHookstate(pushNotificationSubscription);
   const { value: message } = useHookstate(pushNotificationMessage);
@@ -28,6 +32,10 @@ export function usePushNotification() {
   } as const;
 }
 
+/**
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/push-notification.md
+ */
 export async function sendPushNotificationClient({
   data,
   log = false
