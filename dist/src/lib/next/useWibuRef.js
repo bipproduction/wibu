@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.useWibuRef = useWibuRef;
 const react_1 = require("react");
 /**
- * ### GUIDE
- * [useWibuRef](https://github.com/bipproduction/wibu/tree/main/GUIDE/use-wibu-ref.md)
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/use-wibu-ref.md
  */
 function useWibuRef({ initialRef, initialValue, log = false }) {
     const [value, setValue] = (0, react_1.useState)(initialValue);

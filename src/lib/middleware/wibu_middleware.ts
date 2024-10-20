@@ -112,17 +112,21 @@ export async function wibuMiddleware(
     return setCorsHeaders(NextResponse.redirect(new URL(userPath, req.url)));
   }
 
-  // Validate user access with external API
-  const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    }
-  });
 
-  if (!validationResponse.ok) {
-    printLog(log, "unauthorized");
-    return setCorsHeaders(unauthorizedResponse());
+  if(req.nextUrl.pathname.startsWith(apiPath)){
+    const reqToken = req.headers.get("Authorization")?.split(" ")[1];
+    // Validate user access with external API
+    const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${reqToken}`
+      }
+    });
+
+    if (!validationResponse.ok) {
+        printLog(log, "unauthorized");
+        return setCorsHeaders(unauthorizedResponse());
+      }
   }
 
   printLog(log, "authorized");

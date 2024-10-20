@@ -31,10 +31,9 @@ const envClientClass = (0, dedent_1.default) `
       }
     }
 
-    const localEnv = process.env;
     export function EnvClientProvider({ env }: { env: string }) {
       try {
-        const jsonEnv = env ? JSON.parse(env) : localEnv;
+        const jsonEnv = JSON.parse(env)
         EnvClient.init(jsonEnv);
       } catch (error) {
         console.log(error);

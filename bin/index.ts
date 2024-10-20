@@ -8,6 +8,8 @@ import { push } from "./lib/git";
 import * as pwa from "./lib/pwa";
 import { route } from "./lib/route";
 import dedent from "dedent";
+import * as lib from "./lib";
+import { generateWebpush } from "./lib/generate_webpush";
 
 const program = new Command();
 
@@ -100,6 +102,30 @@ program
     console.log(dedent`
       Example:
         $ wibu gen-prisma
+    `);
+  });
+
+// Command: api validate
+program
+  .command("gen-validate")
+  .description("generate validate")
+  .action(lib.generateApiValidate)
+  .on("--help", () => {
+    console.log(dedent`
+      Example:
+        $ wibu gen-validate
+    `);
+  });
+
+// generate web push key
+program
+  .command("gen-webpush")
+  .description("generate web push key")
+  .action(generateWebpush)
+  .on("--help", () => {
+    console.log(dedent`
+      Example:
+        $ wibu gen-webpush
     `);
   });
 

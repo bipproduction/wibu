@@ -1,3 +1,4 @@
+export * as Push from "./lib/push_notification";
 export { useWibuRef } from "./lib/next/useWibuRef";
 export { wibuMiddleware } from "./lib/middleware/wibu_middleware";
 export { WibuRealtime } from "./lib/realtime/wibu_realtime";

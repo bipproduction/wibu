@@ -27,29 +27,8 @@ function printLog(log, text, title) {
     log && console.log(title || "==>", text);
 }
 /**
- * @example
-import { NextRequest } from "next/server";
-import { wibuMiddleware } from "wibu"; // Pastikan ini mengarah ke file yang benar
-import { EnvServer } from "./lib/server/EnvServer";
-
-// Inisialisasi environment
-EnvServer.init(process.env as any);
-
-export const middleware = async (req: NextRequest) =>
-  await wibuMiddleware(req, {
-    apiPath: "/api",
-    encodedKey: EnvServer.env.NEXT_PUBLICWA_SERVER_TOKEN_KEY,
-    loginPath: "/login",
-    publicRoutes: ["/login", "/api/*"], // Menambahkan route publik di sini
-    sessionKey: EnvServer.env.NEXT_PUBLIC_WA_SERVER_SESSION_KEY,
-    userPath: "/user",
-    validationApiRoute: "/api/validate"
-  });
-
-export const config = {
-  matcher: ["/((?!_next|static|favicon.ico).*)"] // Menyertakan semua route kecuali yang diabaikan
-};
-
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/wibu-midleware.md
  */
 async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", userPath = "/user", encodedKey, publicRoutes = ["/", "/login", "/register"], sessionKey, validationApiRoute = "/api/validate", log = false }) {
     const { pathname } = req.nextUrl;
@@ -93,16 +72,19 @@ async function wibuMiddleware(req, { apiPath = "/api", loginPath = "/login", use
         printLog(log, "redirect to user path");
         return setCorsHeaders(server_1.NextResponse.redirect(new URL(userPath, req.url)));
     }
-    // Validate user access with external API
-    const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
+    if (req.nextUrl.pathname.startsWith(apiPath)) {
+        const reqToken = req.headers.get("Authorization")?.split(" ")[1];
+        // Validate user access with external API
+        const validationResponse = await fetch(new URL(validationApiRoute, req.url), {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${reqToken}`
+            }
+        });
+        if (!validationResponse.ok) {
+            printLog(log, "unauthorized");
+            return setCorsHeaders(unauthorizedResponse());
         }
-    });
-    if (!validationResponse.ok) {
-        printLog(log, "unauthorized");
-        return setCorsHeaders(unauthorizedResponse());
     }
     printLog(log, "authorized");
     // Proceed with the request

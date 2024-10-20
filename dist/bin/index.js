@@ -36,6 +36,8 @@ const git_1 = require("./lib/git");
 const pwa = __importStar(require("./lib/pwa"));
 const route_1 = require("./lib/route");
 const dedent_1 = __importDefault(require("dedent"));
+const lib = __importStar(require("./lib"));
+const generate_webpush_1 = require("./lib/generate_webpush");
 const program = new commander_1.Command();
 program
     .version("1.0.1") // Ganti dengan versi yang sesuai
@@ -119,6 +121,28 @@ program
     console.log((0, dedent_1.default) `
       Example:
         $ wibu gen-prisma
+    `);
+});
+// Command: api validate
+program
+    .command("gen-validate")
+    .description("generate validate")
+    .action(lib.generateApiValidate)
+    .on("--help", () => {
+    console.log((0, dedent_1.default) `
+      Example:
+        $ wibu gen-validate
+    `);
+});
+// generate web push key
+program
+    .command("gen-webpush")
+    .description("generate web push key")
+    .action(generate_webpush_1.generateWebpush)
+    .on("--help", () => {
+    console.log((0, dedent_1.default) `
+      Example:
+        $ wibu gen-webpush
     `);
 });
 // Command: gen-type
