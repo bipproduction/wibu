@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/bipproduction/package-template/compare/v0.2.3...v0.2.4) (2024-10-22)
+
+
+### Features
+
+* Add CLI commands ([e8565b5](https://github.com/bipproduction/package-template/commit/e8565b54349e4d62e3ee2cb7c8e95ae44f2793d5))
+
 ### [0.2.3](https://github.com/bipproduction/package-template/compare/v0.2.2...v0.2.3) (2024-10-22)
 
 ### [0.2.2](https://github.com/bipproduction/package-template/compare/v0.2.1...v0.2.2) (2024-10-22)
