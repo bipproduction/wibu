@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.1](https://github.com/bipproduction/package-template/compare/v0.1.43...v0.2.1) (2024-10-22)
+
+
+### Features
+
+* **push-notification:** Implement push notification feature ([e00d4fe](https://github.com/bipproduction/package-template/commit/e00d4fe5fa89e149946a775f0adf7d760ea20a12))
+
 ### [0.1.43](https://github.com/bipproduction/package-template/compare/v0.1.42...v0.1.43) (2024-10-20)
 
 

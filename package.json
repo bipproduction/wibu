@@ -1,6 +1,6 @@
 {
   "name": "wibu",
-  "version": "0.1.43",
+  "version": "0.2.1",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "bin": {
@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && tsc && chmod +x dist/bin/index.js",
+    "build": "rm -rf dist && tsc && chmod +x dist/bin/index.js && npx standard-version --yes",
     "dev": "tsc --watch"
   },
   "dependencies": {
