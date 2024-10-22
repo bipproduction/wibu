@@ -4,6 +4,7 @@ import "colors";
 import { path as appPath } from "app-root-path";
 import fs from "fs/promises";
 import loading from "loading-cli";
+import {execSync} from 'child_process'
 
 const assetRoot = path.join(appPath, "assets");
 const targetRoot = process.cwd();
@@ -11,7 +12,7 @@ const middlewareRoot = path.join(assetRoot, "middleware");
 
 export async function installMiddleware() {
   const log = loading("loading ...").start();
-
+  execSync('yarn add bipproduction/wibu prisma @prisma/client web-push @types/web-push @hookstate/core', { cwd: targetRoot });
   await fs.mkdir(path.join(targetRoot, "src", "lib", "auth"), {
     recursive: true
   });
@@ -57,12 +58,12 @@ async function findNextConfig() {
   return false;
 }
 
-async function getFiles(log: loading.Loading) {
-  for await (const entry of readdirp(path.join(assetRoot, "middleware"))) {
-    const filePath = entry.fullPath;
-    const finalPath = entry.path.replace(".wibu", "");
+// async function getFiles(log: loading.Loading) {
+//   for await (const entry of readdirp(path.join(assetRoot, "middleware"))) {
+//     const filePath = entry.fullPath;
+//     const finalPath = entry.path.replace(".wibu", "");
 
-    await fs.copyFile(filePath, path.join(targetRoot, finalPath));
-    log.info(finalPath);
-  }
-}
+//     await fs.copyFile(filePath, path.join(targetRoot, finalPath));
+//     log.info(finalPath);
+//   }
+// }

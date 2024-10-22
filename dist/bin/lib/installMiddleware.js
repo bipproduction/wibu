@@ -10,11 +10,13 @@ require("colors");
 const app_root_path_1 = require("app-root-path");
 const promises_1 = __importDefault(require("fs/promises"));
 const loading_cli_1 = __importDefault(require("loading-cli"));
+const child_process_1 = require("child_process");
 const assetRoot = path_1.default.join(app_root_path_1.path, "assets");
 const targetRoot = process.cwd();
 const middlewareRoot = path_1.default.join(assetRoot, "middleware");
 async function installMiddleware() {
     const log = (0, loading_cli_1.default)("loading ...").start();
+    (0, child_process_1.execSync)('yarn add bipproduction/wibu prisma @prisma/client web-push @types/web-push @hookstate/core', { cwd: targetRoot });
     await promises_1.default.mkdir(path_1.default.join(targetRoot, "src", "lib", "auth"), {
         recursive: true
     });
@@ -53,11 +55,11 @@ async function findNextConfig() {
     }
     return false;
 }
-async function getFiles(log) {
-    for await (const entry of (0, readdirp_1.default)(path_1.default.join(assetRoot, "middleware"))) {
-        const filePath = entry.fullPath;
-        const finalPath = entry.path.replace(".wibu", "");
-        await promises_1.default.copyFile(filePath, path_1.default.join(targetRoot, finalPath));
-        log.info(finalPath);
-    }
-}
+// async function getFiles(log: loading.Loading) {
+//   for await (const entry of readdirp(path.join(assetRoot, "middleware"))) {
+//     const filePath = entry.fullPath;
+//     const finalPath = entry.path.replace(".wibu", "");
+//     await fs.copyFile(filePath, path.join(targetRoot, finalPath));
+//     log.info(finalPath);
+//   }
+// }
