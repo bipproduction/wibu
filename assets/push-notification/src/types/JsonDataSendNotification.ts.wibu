@@ -1,0 +1,7 @@
+export type JSonDataSendNotification = {
+  title: string;
+  body: string;
+  sub?: PushSubscription;
+};
+
+// wibu:0.2.2

@@ -1,0 +1,11 @@
+import { WibuConfigVariant } from "./WibuConfigVariant";
+
+export type WibuConfig = {
+  variant: WibuConfigVariant;
+  publicRoutes: string[];
+  encodedKey: string;
+  sessionKey: string;
+  validationApiRoute: string;
+};
+
+// wibu:0.2.2

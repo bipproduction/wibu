@@ -19,6 +19,10 @@ class SendNotificationEndpoint {
         this.endpoint = url;
     }
 }
+/**
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/push-notification.md
+ */
 function usePushNotification() {
     const { value: subscription } = (0, core_1.useHookstate)(pushState_1.pushNotificationSubscription);
     const { value: message } = (0, core_1.useHookstate)(pushState_1.pushNotificationMessage);
@@ -28,6 +32,10 @@ function usePushNotification() {
         endpoint: SendNotificationEndpoint.endpoint
     };
 }
+/**
+ * # GUIDE
+ * @see https://github.com/bipproduction/wibu/tree/main/GUIDE/push-notification.md
+ */
 async function sendPushNotificationClient({ data, log = false }) {
     const printLog = (0, devLog_1.devLog)(log);
     try {

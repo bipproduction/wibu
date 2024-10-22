@@ -1,29 +1,27 @@
-### PACKAGE TEMPLATE
+# WIBU
 
+### CLI
 
-### MIDDLEWARE
+```txt
+Usage: wibu [options] [command]
 
-```ts
-import { NextRequest } from "next/server";
-import { wibuMiddleware } from "wibu/middleware";
+CLI untuk berbagai perintah utilitas wibu
 
-export const middleware = (req: NextRequest) =>
-  wibuMiddleware({
-    req,
-    config: {
-      apiPath: "/api",
-      exp: "7 yeas",
-      loginPath: "/login",
-      publicRoutes: ["/login", "/register"],
-      publicRoutePatterns: [/^\/api\/files\/\w+/],
-      userPath: "/user",
-      tokenName: "wibu-token"
-    },
-    encodedKey: "makuro",
-  });
-  
-// Konfigurasi buat middleware Next.js
-export const config = {
-  matcher: ["/((?!_next|static|favicon.ico).*)"]
-};
-```
+Options:
+  -V, --version               output the version number
+  -h, --help                  display help for command
+
+Commands:
+  pwa-install                 generate pwa nextjs
+  pwa-uninstall               generate pwa nextjs
+  gen-route                   generate route
+  git-push [branch]           git push
+  gen-env                     generate env
+  gen-JSDoc <path>            generate JSDoc
+  gen-prisma                  generate prisma
+  gen-validate                generate validate
+  gen-webpush                 generate web push key
+  gen-type <path> [filename]  generate type
+  *
+  help [command]              display help for command
+  ```

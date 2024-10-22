@@ -23,7 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useWibuRealtime = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = exports.WibuRealtime = exports.wibuMiddleware = exports.useWibuRef = exports.Push = void 0;
+exports.useWibuRealtime = exports.encrypt = exports.decrypt = exports.sessionCreate = exports.waPinHandler = exports.sessionDelete = exports.wibuAiGenerate = exports.wibuAiChat = exports.WibuRealtime = exports.wibuMiddleware = exports.useWibuRef = exports.Push = exports.devLog = void 0;
+var devLog_1 = require("./lib/devLog");
+Object.defineProperty(exports, "devLog", { enumerable: true, get: function () { return devLog_1.devLog; } });
 exports.Push = __importStar(require("./lib/push_notification"));
 var useWibuRef_1 = require("./lib/next/useWibuRef");
 Object.defineProperty(exports, "useWibuRef", { enumerable: true, get: function () { return useWibuRef_1.useWibuRef; } });

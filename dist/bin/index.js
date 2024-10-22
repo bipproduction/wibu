@@ -1,69 +1,44 @@
 #!/usr/bin/env node
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
+const dedent_1 = __importDefault(require("dedent"));
 const generate_env_1 = require("./lib/generate_env");
-const generate_example_1 = require("./lib/generate_example");
 const generate_prisma_1 = require("./lib/generate_prisma");
 const generate_type_1 = require("./lib/generate_type");
+const installPushNotification_1 = require("./lib/installPushNotification");
 const git_1 = require("./lib/git");
-const pwa = __importStar(require("./lib/pwa"));
+const installMiddleware_1 = require("./lib/installMiddleware");
 const route_1 = require("./lib/route");
-const dedent_1 = __importDefault(require("dedent"));
-const lib = __importStar(require("./lib"));
-const generate_webpush_1 = require("./lib/generate_webpush");
 const program = new commander_1.Command();
 program
     .version("1.0.1") // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");
 // Command: pwa-install
-program
-    .command("pwa-install")
-    .description("generate pwa nextjs")
-    .action(pwa.install)
-    .on("--help", () => {
-    console.log((0, dedent_1.default) `
-      Example:
-        $ wibu pwa-install
-    `);
-});
+// program
+//   .command("pwa-install")
+//   .description("generate pwa nextjs")
+//   .action(pwa.install)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu pwa-install
+//     `);
+//   });
 // Command: pwa-uninstall
-program
-    .command("pwa-uninstall")
-    .description("generate pwa nextjs")
-    .action(pwa.uninstall)
-    .on("--help", () => {
-    console.log((0, dedent_1.default) `
-      Example:
-        $ wibu pwa-uninstall
-    `);
-});
+// program
+//   .command("pwa-uninstall")
+//   .description("generate pwa nextjs")
+//   .action(pwa.uninstall)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu pwa-uninstall
+//     `);
+//   });
 // Command: route
 program
     .command("gen-route")
@@ -99,18 +74,16 @@ program
         $ wibu gen-env
     `);
 });
-// Command: gen-JSDoc
+// Command: gen-middleware
 program
-    .command("gen-JSDoc <path>")
-    .description("generate JSDoc")
-    .action((path) => {
-    (0, generate_example_1.genExample)(path);
-})
+    .command("install-middleware")
+    .description("install middleware")
+    .action(installMiddleware_1.installMiddleware)
     .on("--help", () => {
     console.log((0, dedent_1.default) `
-      Example:
-        $ wibu gen-JSDoc ./data.ts
-    `);
+    Example:
+      $ wibu install-middleware
+  `);
 });
 // Command: gen-prisma
 program
@@ -124,25 +97,36 @@ program
     `);
 });
 // Command: api validate
-program
-    .command("gen-validate")
-    .description("generate validate")
-    .action(lib.generateApiValidate)
-    .on("--help", () => {
-    console.log((0, dedent_1.default) `
-      Example:
-        $ wibu gen-validate
-    `);
-});
+// program
+//   .command("gen-validate")
+//   .description("generate validate")
+//   .action(lib.generateApiValidate)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu gen-validate
+//     `);
+//   });
 // generate web push key
+// program
+//   .command("gen-webpush")
+//   .description("generate web push key")
+//   .action(generateWebpush)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu gen-webpush
+//     `);
+//   });
+// generate wibu worker
 program
-    .command("gen-webpush")
-    .description("generate web push key")
-    .action(generate_webpush_1.generateWebpush)
+    .command("install-push")
+    .description("install push notification")
+    .action(installPushNotification_1.innstallPushNotification)
     .on("--help", () => {
     console.log((0, dedent_1.default) `
       Example:
-        $ wibu gen-webpush
+        $ wibu install-push
     `);
 });
 // Command: gen-type

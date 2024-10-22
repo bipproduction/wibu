@@ -1,3 +1,4 @@
+export { devLog } from "./lib/devLog";
 export * as Push from "./lib/push_notification";
 export { useWibuRef } from "./lib/next/useWibuRef";
 export { wibuMiddleware } from "./lib/middleware/wibu_middleware";

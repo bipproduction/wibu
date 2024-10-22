@@ -1,15 +1,13 @@
 #!/usr/bin/env node
 import { Command } from "commander";
+import dedent from "dedent";
 import { generateEnv } from "./lib/generate_env";
-import { genExample } from "./lib/generate_example";
 import { generatePrisma } from "./lib/generate_prisma";
 import { generateType } from "./lib/generate_type";
+import { innstallPushNotification } from "./lib/installPushNotification";
 import { push } from "./lib/git";
-import * as pwa from "./lib/pwa";
+import { installMiddleware } from "./lib/installMiddleware";
 import { route } from "./lib/route";
-import dedent from "dedent";
-import * as lib from "./lib";
-import { generateWebpush } from "./lib/generate_webpush";
 
 const program = new Command();
 
@@ -18,28 +16,28 @@ program
   .description("CLI untuk berbagai perintah utilitas wibu");
 
 // Command: pwa-install
-program
-  .command("pwa-install")
-  .description("generate pwa nextjs")
-  .action(pwa.install)
-  .on("--help", () => {
-    console.log(dedent`
-      Example:
-        $ wibu pwa-install
-    `);
-  });
+// program
+//   .command("pwa-install")
+//   .description("generate pwa nextjs")
+//   .action(pwa.install)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu pwa-install
+//     `);
+//   });
 
 // Command: pwa-uninstall
-program
-  .command("pwa-uninstall")
-  .description("generate pwa nextjs")
-  .action(pwa.uninstall)
-  .on("--help", () => {
-    console.log(dedent`
-      Example:
-        $ wibu pwa-uninstall
-    `);
-  });
+// program
+//   .command("pwa-uninstall")
+//   .description("generate pwa nextjs")
+//   .action(pwa.uninstall)
+//   .on("--help", () => {
+//     console.log(dedent`
+//       Example:
+//         $ wibu pwa-uninstall
+//     `);
+//   });
 
 // Command: route
 program
@@ -79,18 +77,16 @@ program
     `);
   });
 
-// Command: gen-JSDoc
+// Command: gen-middleware
 program
-  .command("gen-JSDoc <path>")
-  .description("generate JSDoc")
-  .action((path) => {
-    genExample(path);
-  })
+  .command("install-middleware")
+  .description("install middleware")
+  .action(installMiddleware as any)
   .on("--help", () => {
     console.log(dedent`
-      Example:
-        $ wibu gen-JSDoc ./data.ts
-    `);
+    Example:
+      $ wibu install-middleware
+  `);
   });
 
 // Command: gen-prisma
@@ -105,27 +101,14 @@ program
     `);
   });
 
-// Command: api validate
 program
-  .command("gen-validate")
-  .description("generate validate")
-  .action(lib.generateApiValidate)
+  .command("install-push-notification")
+  .description("install push notification")
+  .action(innstallPushNotification)
   .on("--help", () => {
     console.log(dedent`
       Example:
-        $ wibu gen-validate
-    `);
-  });
-
-// generate web push key
-program
-  .command("gen-webpush")
-  .description("generate web push key")
-  .action(generateWebpush)
-  .on("--help", () => {
-    console.log(dedent`
-      Example:
-        $ wibu gen-webpush
+        $ wibu install-push-notification
     `);
   });
 

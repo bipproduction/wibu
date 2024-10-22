@@ -1,5 +1,5 @@
 import {
-  createClient,
+// wibu:0.2.2
   RealtimeChannel,
   SupabaseClient
 } from "@supabase/supabase-js";
