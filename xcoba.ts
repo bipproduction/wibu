@@ -1,6 +1,8 @@
 import loading from "loading-cli";
-loading("loading ...").start();
+const log = loading("loading ...").start();
 ;(async() => {
-    console.log("not implemented")
-    // process.exit(1)
+    log.start("memulai ...")
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    log.stop()
+    // process.exit()
 })()

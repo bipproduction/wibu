@@ -24,6 +24,7 @@ async function installMiddleware() {
         log.fail(e);
     })
         .finally(() => {
+        log.succeed("middleware installed");
         log.stop();
         process.exit();
     });
@@ -35,38 +36,42 @@ async function app() {
     await installModule();
 }
 async function installModule() {
+    log.start("installing middleware ...");
     for await (const entry of (0, readdirp_1.default)(path_1.default.join(assetRoot, "middleware"))) {
         const filePath = entry.fullPath;
         const finalPath = entry.path.replace(".wibu", "");
         await promises_1.default.copyFile(filePath, path_1.default.join(targetRoot, finalPath));
-        log.info(finalPath);
+        log.start(finalPath);
     }
 }
 async function createDir() {
+    log.start("creating dir ...");
     for await (const entry of (0, readdirp_1.default)(middlewareRoot, {
         type: "directories"
     })) {
         const dir = entry.path;
         await promises_1.default.mkdir(path_1.default.join(targetRoot, dir), { recursive: true });
+        log.start(dir);
     }
 }
 async function installSupportPackage() {
+    log.start("installing support package ...");
     await execSync("yarn add prisma @prisma/client web-push @types/web-push @hookstate/core", { cwd: targetRoot });
 }
 async function installWibuPackage() {
     const appVersion = await getAppVersion();
-    const remoteAppVersion = await getRemoteAppVersion();
-    log.info("update wibu ...");
+    log.start("update wibu ...");
     const wibuPackage = await getWibuPackage();
     const installText = wibuPackage
         ? "yarn remove wibu && yarn add bipproduction/wibu"
         : "yarn add bipproduction/wibu";
     await execSync(installText, { cwd: targetRoot });
     log.succeed("wibu installed");
-    if (appVersion !== remoteAppVersion) {
+    const appCurrentVersion = await getAppVersion();
+    if (appVersion !== appCurrentVersion) {
         console.log((0, dedent_1.default) `
       ----------------------------------
-      update wibu from ${appVersion} to ${remoteAppVersion}
+      update wibu from ${appVersion} to ${appCurrentVersion}
       ----------------------------------
       silahkan ulangi
       `);
@@ -74,6 +79,7 @@ async function installWibuPackage() {
     }
 }
 async function getWibuPackage() {
+    log.start("checking wibu package ...");
     const { dependencies } = await getAppPackage();
     if (!dependencies["wibu"]) {
         return false;
@@ -82,6 +88,7 @@ async function getWibuPackage() {
 }
 async function getAppPackage() {
     try {
+        log.start("checking app package ...");
         const dep = await promises_1.default.readFile(path_1.default.join(app_root_path_1.path, "package.json"), "utf8");
         const depJson = JSON.parse(dep);
         return depJson;
@@ -101,6 +108,7 @@ async function getRemoteAppVersion() {
     process.exit();
 }
 async function getAppVersion() {
+    log.start("checking app version ...");
     const { version } = await getAppPackage();
     return version;
 }
