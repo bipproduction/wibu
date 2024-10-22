@@ -96,37 +96,14 @@ program
         $ wibu gen-prisma
     `);
 });
-// Command: api validate
-// program
-//   .command("gen-validate")
-//   .description("generate validate")
-//   .action(lib.generateApiValidate)
-//   .on("--help", () => {
-//     console.log(dedent`
-//       Example:
-//         $ wibu gen-validate
-//     `);
-//   });
-// generate web push key
-// program
-//   .command("gen-webpush")
-//   .description("generate web push key")
-//   .action(generateWebpush)
-//   .on("--help", () => {
-//     console.log(dedent`
-//       Example:
-//         $ wibu gen-webpush
-//     `);
-//   });
-// generate wibu worker
 program
-    .command("install-push")
+    .command("install-push-notification")
     .description("install push notification")
     .action(installPushNotification_1.innstallPushNotification)
     .on("--help", () => {
     console.log((0, dedent_1.default) `
       Example:
-        $ wibu install-push
+        $ wibu install-push-notification
     `);
 });
 // Command: gen-type

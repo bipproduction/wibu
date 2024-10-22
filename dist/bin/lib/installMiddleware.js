@@ -12,6 +12,7 @@ const promises_1 = __importDefault(require("fs/promises"));
 const loading_cli_1 = __importDefault(require("loading-cli"));
 const assetRoot = path_1.default.join(app_root_path_1.path, "assets");
 const targetRoot = process.cwd();
+const middlewareRoot = path_1.default.join(assetRoot, "middleware");
 async function installMiddleware() {
     const log = (0, loading_cli_1.default)("loading ...").start();
     await promises_1.default.mkdir(path_1.default.join(targetRoot, "src", "lib", "auth"), {
@@ -21,7 +22,18 @@ async function installMiddleware() {
     if (!adaConfig) {
         return log.fail("not nextjs project");
     }
-    await getFiles(log);
+    for await (const entry of (0, readdirp_1.default)(middlewareRoot, {
+        type: "directories"
+    })) {
+        const dir = entry.path;
+        await promises_1.default.mkdir(path_1.default.join(targetRoot, dir), { recursive: true });
+    }
+    for await (const entry of (0, readdirp_1.default)(path_1.default.join(assetRoot, "middleware"))) {
+        const filePath = entry.fullPath;
+        const finalPath = entry.path.replace(".wibu", "");
+        await promises_1.default.copyFile(filePath, path_1.default.join(targetRoot, finalPath));
+        log.info(finalPath);
+    }
     log.succeed("middleware installed");
     log.stop();
 }

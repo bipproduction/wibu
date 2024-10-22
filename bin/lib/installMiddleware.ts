@@ -7,6 +7,7 @@ import loading from "loading-cli";
 
 const assetRoot = path.join(appPath, "assets");
 const targetRoot = process.cwd();
+const middlewareRoot = path.join(assetRoot, "middleware");
 
 export async function installMiddleware() {
   const log = loading("loading ...").start();
@@ -20,7 +21,20 @@ export async function installMiddleware() {
     return log.fail("not nextjs project");
   }
 
-  await getFiles(log);
+  for await (const entry of readdirp(middlewareRoot, {
+    type: "directories"
+  })) {
+    const dir = entry.path;
+    await fs.mkdir(path.join(targetRoot, dir), { recursive: true });
+  }
+
+  for await (const entry of readdirp(path.join(assetRoot, "middleware"))) {
+    const filePath = entry.fullPath;
+    const finalPath = entry.path.replace(".wibu", "");
+
+    await fs.copyFile(filePath, path.join(targetRoot, finalPath));
+    log.info(finalPath);
+  }
 
   log.succeed("middleware installed");
   log.stop();
