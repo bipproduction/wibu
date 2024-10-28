@@ -22,7 +22,7 @@ const program = new Command();
     .version(packageJson.version) // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");
 
-  // // Command: route
+  // Command: route
   program
     .command("gen-route")
     .description("generate route")
