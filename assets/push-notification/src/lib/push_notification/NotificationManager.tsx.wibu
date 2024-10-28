@@ -50,4 +50,4 @@ export function NotificationManager({
   );
 }
 
-// wibu:0.2.2
+// wibu:0.2.29

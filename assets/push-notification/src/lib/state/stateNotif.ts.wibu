@@ -1,4 +1,4 @@
 import { hookstate } from "@hookstate/core";
 export const stateNotif = hookstate("");
 
-// wibu:0.2.2
+// wibu:0.2.29

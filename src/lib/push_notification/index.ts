@@ -1,3 +1,5 @@
+export { pushNotificationDeleteSubscribe } from "./pushNotificationDeleteSubscribe";
+export { pushNotificationGetSubscribe } from "./pushNotificationGetSubscribe";
 export {
   PushNotificationProvider,
   sendPushNotificationClient,

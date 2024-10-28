@@ -7,4 +7,4 @@ export type PushNotificationSubscribe = {
   };
 };
 
-// wibu:0.2.2
+// wibu:0.2.29

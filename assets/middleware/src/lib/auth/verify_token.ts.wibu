@@ -10,4 +10,4 @@ export async function verifyToken({
    
     return await decrypt({ token, encodedKey });
   }
-// wibu:0.2.2
+// wibu:0.2.29

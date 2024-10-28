@@ -50,4 +50,4 @@ async function apiValidate({
   return new Response("ok");
 }
 
-// wibu:0.2.2
+// wibu:0.2.29

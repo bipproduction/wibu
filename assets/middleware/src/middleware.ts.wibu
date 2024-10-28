@@ -196,4 +196,4 @@ export const config = {
   matcher: ["/((?!_next|static|favicon.ico|manifest).*)"]
 };
 
-// wibu:0.2.2
+// wibu:0.2.29

@@ -33,4 +33,4 @@ export async function sessionCreate({
   return token;
 }
 
-// wibu:0.2.2
+// wibu:0.2.29

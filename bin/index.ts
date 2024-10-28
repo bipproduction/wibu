@@ -11,6 +11,7 @@ import { route } from "./lib/route";
 import { path as appPath } from "app-root-path";
 import fs from "fs/promises";
 import path from "path";
+import { installMantine } from "./lib/installMantine";
 
 const program = new Command();
 (async () => {
@@ -55,6 +56,17 @@ const program = new Command();
       console.log(dedent`
       Example:
         $ wibu gen-env
+    `);
+    });
+
+    program
+    .command("install-mantine")
+    .description("install mantine framework")
+    .action(installMantine as any)
+    .on("--help", () => {
+      console.log(dedent`
+      Example:
+        $ wibu install-mantine
     `);
     });
 

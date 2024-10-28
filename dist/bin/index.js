@@ -16,6 +16,7 @@ const route_1 = require("./lib/route");
 const app_root_path_1 = require("app-root-path");
 const promises_1 = __importDefault(require("fs/promises"));
 const path_1 = __importDefault(require("path"));
+const installMantine_1 = require("./lib/installMantine");
 const program = new commander_1.Command();
 (async () => {
     const appPackage = await promises_1.default.readFile(path_1.default.join(app_root_path_1.path, "package.json"), "utf8");
@@ -56,6 +57,16 @@ const program = new commander_1.Command();
         console.log((0, dedent_1.default) `
       Example:
         $ wibu gen-env
+    `);
+    });
+    program
+        .command("install-mantine")
+        .description("install mantine framework")
+        .action(installMantine_1.installMantine)
+        .on("--help", () => {
+        console.log((0, dedent_1.default) `
+      Example:
+        $ wibu install-mantine
     `);
     });
     // Command: gen-middleware

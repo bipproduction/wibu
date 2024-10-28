@@ -5,4 +5,4 @@ export function sessionDelete({ sessionKey }: { sessionKey: string }) {
   return del;
 }
 
-// wibu:0.2.2
+// wibu:0.2.29
