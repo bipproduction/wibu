@@ -16,7 +16,6 @@ import { installMantine } from "./lib/installMantine";
 const program = new Command();
 (async () => {
   let version = "1.0.0";
-
   try {
     const appPackage = await fs.readFile(
       path.join(appPath, "node_modules", "wibu", "package.json"),
