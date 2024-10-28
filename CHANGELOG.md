@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.59](https://github.com/bipproduction/package-template/compare/v0.2.58...v0.2.59) (2024-10-28)
+
 ### [0.2.58](https://github.com/bipproduction/package-template/compare/v0.2.57...v0.2.58) (2024-10-28)
 
 ### [0.2.57](https://github.com/bipproduction/package-template/compare/v0.2.56...v0.2.57) (2024-10-28)
