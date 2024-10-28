@@ -15,11 +15,25 @@ import { installMantine } from "./lib/installMantine";
 
 const program = new Command();
 (async () => {
-  const appPackage = await fs.readFile(path.join(appPath, "package.json"), "utf8");
-  const packageJson = JSON.parse(appPackage);
-  console.log(`wibu v${appPath}`);
+  let version = "1.0.0";
+
+  try {
+    const appPackage = await fs.readFile(
+      path.join(appPath, "node_modules", "wibu", "package.json"),
+      "utf8"
+    );
+    const packageJson = JSON.parse(appPackage);
+    version = packageJson.version;
+  } catch (error) {
+    const appPackage = await fs.readFile(
+      path.join(appPath, "package.json"),
+      "utf8"
+    );
+    const packageJson = JSON.parse(appPackage);
+    version = packageJson.version;
+  }
   program
-    .version(packageJson.version) // Ganti dengan versi yang sesuai
+    .version(version) // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");
 
   // Command: route
@@ -60,7 +74,7 @@ const program = new Command();
     `);
     });
 
-    program
+  program
     .command("install-mantine")
     .description("install mantine framework")
     .action(installMantine as any)
