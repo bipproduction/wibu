@@ -6,6 +6,6 @@ const execPromise = promisify(exec);
 
 export async function applyRoute() {
     const targetPath = process.cwd();
-    WibuLog.log.start("generate route ...");
+    WibuLog.log().start("generate route ...");
     await execPromise("npx wibu gen-route", { cwd: targetPath });
   }

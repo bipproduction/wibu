@@ -7,6 +7,6 @@ const WibuLog_1 = require("./WibuLog");
 const execPromise = (0, util_1.promisify)(child_process_1.exec);
 async function applyEnv() {
     const targetPath = process.cwd();
-    WibuLog_1.WibuLog.log.start("generate env ...");
+    WibuLog_1.WibuLog.log().start("generate env ...");
     await execPromise("npx wibu gen-env", { cwd: targetPath });
 }

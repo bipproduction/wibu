@@ -17,11 +17,12 @@ const program = new Command();
 (async () => {
   const appPackage = await fs.readFile(path.join(appPath, "package.json"), "utf8");
   const packageJson = JSON.parse(appPackage);
+  console.log(`wibu v${appPath}`);
   program
     .version(packageJson.version) // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");
 
-  // Command: route
+  // // Command: route
   program
     .command("gen-route")
     .description("generate route")

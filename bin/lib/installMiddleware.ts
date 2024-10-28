@@ -12,11 +12,11 @@ export async function installMiddleware() {
     supportPackages: "@prisma/client web-push @types/web-push @hookstate/core",
   })
     .catch((e) => {
-      WibuLog.log.fail(e);
+      WibuLog.log().fail(e);
     })
     .finally(() => {
-      WibuLog.log.succeed("middleware installed");
-      WibuLog.log.stop();
+      WibuLog.log().succeed("middleware installed");
+      WibuLog.log().stop();
       process.exit();
     });
 }

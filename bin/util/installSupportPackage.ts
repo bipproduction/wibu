@@ -9,6 +9,6 @@ export async function installSupportPackage({
   supportPackages: string;
 }) {
   const targetRoot = process.cwd();
-  WibuLog.log.start("installing support package ...");
+  WibuLog.log().start("installing support package ...");
   await execPromise(`yarn add ${supportPackages}`, { cwd: targetRoot });
 }

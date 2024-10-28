@@ -5,6 +5,6 @@ const execPromise = promisify(exec);
 
 export async function applyEnv() {
   const targetPath = process.cwd();
-  WibuLog.log.start("generate env ...");
+  WibuLog.log().start("generate env ...");
   await execPromise("npx wibu gen-env", { cwd: targetPath });
 }

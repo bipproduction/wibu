@@ -14,13 +14,13 @@ const execPromise = (0, util_1.promisify)(child_process_1.exec);
 async function installWibuPackage() {
     const targetRoot = process.cwd();
     const appVersion = await (0, getAppVersion_1.getAppVersion)();
-    WibuLog_1.WibuLog.log.start("update wibu ...");
+    WibuLog_1.WibuLog.log().start("update wibu ...");
     const wibuPackage = await (0, getWibuPackage_1.getWibuPackage)();
     const installText = wibuPackage
         ? "yarn remove wibu && yarn add bipproduction/wibu"
         : "yarn add bipproduction/wibu";
     await execPromise(installText, { cwd: targetRoot });
-    WibuLog_1.WibuLog.log.succeed("wibu installed");
+    WibuLog_1.WibuLog.log().succeed("wibu installed");
     const appCurrentVersion = await (0, getAppVersion_1.getAppVersion)();
     if (appVersion !== appCurrentVersion) {
         console.log((0, dedent_1.default) `
