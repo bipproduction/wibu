@@ -6,4 +6,4 @@ export async function GET() {
   return new Response(JSON.stringify({ data: sub }));
 }
 
-// wibu:0.2.29
+// wibu:0.2.82

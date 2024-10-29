@@ -10,4 +10,4 @@ export async function POST() {
   return new Response("ok");
 }
 
-// wibu:0.2.29
+// wibu:0.2.82

@@ -63,4 +63,4 @@ export async function POST(req: Request) {
   return Response.json({ success: true, token });
 }
 
-// wibu:0.2.29
+// wibu:0.2.82

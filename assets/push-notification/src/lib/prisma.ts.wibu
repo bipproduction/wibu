@@ -15,4 +15,4 @@ export default prisma
 
 if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
 
-// wibu:0.2.29
+// wibu:0.2.82

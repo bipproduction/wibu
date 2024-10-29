@@ -1,15 +1,14 @@
-import { path as appRootPath } from "app-root-path";
 import path from "path";
 import dotenv from "dotenv";
 import { Octokit } from "@octokit/core";
-
-dotenv.config({
-  path: path.join(appRootPath, ".env")
-});
+import { AppUtils } from "../../bin/util/AppUtils";
 
 const WIBU_GITHUB = process.env.WIBU_GITHUB!;
 const octokit = new Octokit({ auth: WIBU_GITHUB });
 export async function docs() {
+  dotenv.config({
+    path: path.join(AppUtils.appPath, ".env")
+  });
   syncFork();
 }
 
@@ -44,19 +43,26 @@ export async function checkIfSyncNeeded() {
   const forkRepo = "wibu-example";
 
   // Membandingkan branch 'main' di fork dengan branch 'main' di upstream
-  const comparison = await octokit.request('GET /repos/{owner}/{repo}/compare/{base}...{head}', {
-    owner: forkOwner,    // Pemilik fork kamu
-    repo: forkRepo,      // Repositori fork kamu
-    base: 'main',        // Branch di fork kamu
-    head: `${upstreamOwner}:main`,  // Branch upstream
-  });
+  const comparison = await octokit.request(
+    "GET /repos/{owner}/{repo}/compare/{base}...{head}",
+    {
+      owner: forkOwner, // Pemilik fork kamu
+      repo: forkRepo, // Repositori fork kamu
+      base: "main", // Branch di fork kamu
+      head: `${upstreamOwner}:main` // Branch upstream
+    }
+  );
 
   // Menampilkan hasil perbandingan
   if (comparison.data.behind_by > 0) {
-    console.log(`Fork kamu ketinggalan ${comparison.data.behind_by} commit dari upstream. Sinkronisasi diperlukan.`);
+    console.log(
+      `Fork kamu ketinggalan ${comparison.data.behind_by} commit dari upstream. Sinkronisasi diperlukan.`
+    );
     return true;
   } else {
-    console.log("Fork kamu sudah up to date dengan upstream. Tidak perlu sinkronisasi.");
+    console.log(
+      "Fork kamu sudah up to date dengan upstream. Tidak perlu sinkronisasi."
+    );
     return false;
   }
 }

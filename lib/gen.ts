@@ -1,7 +1,7 @@
 import readdirp from "readdirp";
 import path from "path";
 import fs from "fs/promises";
-import packageJson from "./package.json";
+import packageJson from "../package.json";
 import {path as appPath} from 'app-root-path'
 
 (async () => {

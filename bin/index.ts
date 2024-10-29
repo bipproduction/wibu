@@ -1,36 +1,27 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import dedent from "dedent";
+import fs from "fs/promises";
+import path from "path";
 import { generateEnv } from "./lib/generate_env";
 import { generatePrisma } from "./lib/generate_prisma";
 import { generateType } from "./lib/generate_type";
-import { innstallPushNotification } from "./lib/installPushNotification";
 import { push } from "./lib/git";
-import { installMiddleware } from "./lib/installMiddleware";
-import { route } from "./lib/route";
-import { path as appPath } from "app-root-path";
-import fs from "fs/promises";
-import path from "path";
 import { installMantine } from "./lib/installMantine";
+import { installMiddleware } from "./lib/installMiddleware";
+import { innstallPushNotification } from "./lib/installPushNotification";
+import { route } from "./lib/route";
+import { AppUtils } from "./util/AppUtils";
 
 const program = new Command();
 (async () => {
-  let version = "1.0.0";
-  try {
-    const appPackage = await fs.readFile(
-      path.join(appPath, "node_modules", "wibu", "package.json"),
-      "utf8"
-    );
-    const packageJson = JSON.parse(appPackage);
-    version = packageJson.version;
-  } catch (error) {
-    const appPackage = await fs.readFile(
-      path.join(appPath, "package.json"),
-      "utf8"
-    );
-    const packageJson = JSON.parse(appPackage);
-    version = packageJson.version;
-  }
+  await AppUtils.init();
+  const appPackage = await fs.readFile(
+    path.join(AppUtils.appPath, "package.json"),
+    "utf8"
+  );
+  const packageJson = JSON.parse(appPackage);
+  let version = packageJson.version;
   program
     .version(version) // Ganti dengan versi yang sesuai
     .description("CLI untuk berbagai perintah utilitas wibu");

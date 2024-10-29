@@ -6,4 +6,4 @@ export interface Envs {
   VAPID_PRIVATE_KEY: string;
   WIBU_PUSH_DB_TOKEN: string;
 }
-// wibu:0.2.29
+// wibu:0.2.82

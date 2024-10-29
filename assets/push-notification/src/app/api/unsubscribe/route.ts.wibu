@@ -7,4 +7,4 @@ export async function POST(req: Request) {
   return new Response(JSON.stringify({ data: del }));
 }
 
-// wibu:0.2.29
+// wibu:0.2.82

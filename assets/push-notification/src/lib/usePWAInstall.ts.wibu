@@ -46,4 +46,4 @@ export function usePWAInstall() {
   };
 }
 
-// wibu:0.2.29
+// wibu:0.2.82

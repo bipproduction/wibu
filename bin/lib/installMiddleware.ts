@@ -1,12 +1,12 @@
-import { path as appPath } from "app-root-path";
+
 import path from "path";
 import { installApp } from "../util/installApp";
 import { WibuLog } from "../util/WibuLog";
-
-const assetRoot = path.join(appPath, "assets");
-const middlewareAssetRoot = path.join(assetRoot, "middleware");
+import { AppUtils } from "../util/AppUtils";
 
 export async function installMiddleware() {
+  const assetRoot = path.join(AppUtils.appPath, "assets");
+const middlewareAssetRoot = path.join(assetRoot, "middleware");
   installApp({
     sourceDir: middlewareAssetRoot,
     supportPackages: "@prisma/client web-push @types/web-push @hookstate/core",

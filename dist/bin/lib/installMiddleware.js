@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.installMiddleware = installMiddleware;
-const app_root_path_1 = require("app-root-path");
 const path_1 = __importDefault(require("path"));
 const installApp_1 = require("../util/installApp");
 const WibuLog_1 = require("../util/WibuLog");
-const assetRoot = path_1.default.join(app_root_path_1.path, "assets");
-const middlewareAssetRoot = path_1.default.join(assetRoot, "middleware");
+const AppUtils_1 = require("../util/AppUtils");
 async function installMiddleware() {
+    const assetRoot = path_1.default.join(AppUtils_1.AppUtils.appPath, "assets");
+    const middlewareAssetRoot = path_1.default.join(assetRoot, "middleware");
     (0, installApp_1.installApp)({
         sourceDir: middlewareAssetRoot,
         supportPackages: "@prisma/client web-push @types/web-push @hookstate/core",

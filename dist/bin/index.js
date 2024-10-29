@@ -6,26 +6,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const dedent_1 = __importDefault(require("dedent"));
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
 const generate_env_1 = require("./lib/generate_env");
 const generate_prisma_1 = require("./lib/generate_prisma");
 const generate_type_1 = require("./lib/generate_type");
-const installPushNotification_1 = require("./lib/installPushNotification");
 const git_1 = require("./lib/git");
-const installMiddleware_1 = require("./lib/installMiddleware");
-const route_1 = require("./lib/route");
-const app_root_path_1 = require("app-root-path");
-const promises_1 = __importDefault(require("fs/promises"));
-const path_1 = __importDefault(require("path"));
 const installMantine_1 = require("./lib/installMantine");
+const installMiddleware_1 = require("./lib/installMiddleware");
+const installPushNotification_1 = require("./lib/installPushNotification");
+const route_1 = require("./lib/route");
+const AppUtils_1 = require("./util/AppUtils");
 const program = new commander_1.Command();
 (async () => {
-    const appPackage = await promises_1.default.readFile(path_1.default.join(app_root_path_1.path, "package.json"), "utf8");
+    await AppUtils_1.AppUtils.init();
+    const appPackage = await promises_1.default.readFile(path_1.default.join(AppUtils_1.AppUtils.appPath, "package.json"), "utf8");
     const packageJson = JSON.parse(appPackage);
-    console.log(`wibu v${app_root_path_1.path}`);
+    let version = packageJson.version;
     program
-        .version(packageJson.version) // Ganti dengan versi yang sesuai
+        .version(version) // Ganti dengan versi yang sesuai
         .description("CLI untuk berbagai perintah utilitas wibu");
-    // // Command: route
+    // Command: route
     program
         .command("gen-route")
         .description("generate route")

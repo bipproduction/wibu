@@ -6,16 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.docs = docs;
 exports.syncFork = syncFork;
 exports.checkIfSyncNeeded = checkIfSyncNeeded;
-const app_root_path_1 = require("app-root-path");
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const core_1 = require("@octokit/core");
-dotenv_1.default.config({
-    path: path_1.default.join(app_root_path_1.path, ".env")
-});
+const AppUtils_1 = require("../../bin/util/AppUtils");
 const WIBU_GITHUB = process.env.WIBU_GITHUB;
 const octokit = new core_1.Octokit({ auth: WIBU_GITHUB });
 async function docs() {
+    dotenv_1.default.config({
+        path: path_1.default.join(AppUtils_1.AppUtils.appPath, ".env")
+    });
     syncFork();
 }
 async function syncFork() {
@@ -42,11 +42,11 @@ async function checkIfSyncNeeded() {
     const forkOwner = "malikkurosaki";
     const forkRepo = "wibu-example";
     // Membandingkan branch 'main' di fork dengan branch 'main' di upstream
-    const comparison = await octokit.request('GET /repos/{owner}/{repo}/compare/{base}...{head}', {
+    const comparison = await octokit.request("GET /repos/{owner}/{repo}/compare/{base}...{head}", {
         owner: forkOwner, // Pemilik fork kamu
         repo: forkRepo, // Repositori fork kamu
-        base: 'main', // Branch di fork kamu
-        head: `${upstreamOwner}:main`, // Branch upstream
+        base: "main", // Branch di fork kamu
+        head: `${upstreamOwner}:main` // Branch upstream
     });
     // Menampilkan hasil perbandingan
     if (comparison.data.behind_by > 0) {
