@@ -1,6 +1,6 @@
 {
   "name": "wibu",
-  "version": "0.2.82",
+  "version": "0.2.83",
   "main": "dist/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "bin": {
@@ -9,7 +9,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc && chmod +x dist/bin/index.js && npx standard-version --yes",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "gen": "npx tsx ./lib/gen.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.19.0",
